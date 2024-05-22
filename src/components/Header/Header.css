@@ -1,0 +1,23 @@
+.header {
+  height: 50px;
+  width: 95%;
+  display: flex;
+  align-items: center;
+  padding: 0px 5px;
+  background-color: #f8f9fa;
+  border: 1px solid rgb(255, 98, 98);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.user-name {
+  margin: 0;
+  font-size: 18px;
+  margin-inline: 20px;
+  font-weight: 500;  
+  color: #333;
+}
