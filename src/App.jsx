@@ -11,11 +11,8 @@ const App = () => {
   const handleAddCourseClick = () => {
     setIsCreatingCourse(true);
   };
-
-  const handleCourseCreated = () => {
-    setIsCreatingCourse(false);
+  const handleCourseCreated = () => {setIsCreatingCourse(false);
   };
-
   return (
     <CourseAuthorProvider>
       <div>
