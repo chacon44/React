@@ -1,7 +1,7 @@
-import React from 'react';
-import './Button.css';
+import React from "react";
+import "./Button.css";
 
-const Button = ({ buttonText, onClick}) => {
+const Button = ({ buttonText, onClick }) => {
   return (
     <button className="button" onClick={onClick}>
       {buttonText}

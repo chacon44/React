@@ -1,5 +1,4 @@
-
-.global-courseCard-container{
+.global-courseCard-container {
   margin-left: 10px;
   background-color: white;
   display: flex;
@@ -7,15 +6,15 @@
   align-items: center;
   justify-content: center;
 }
-.courseCard-container{
+.courseCard-container {
   background-color: white;
   width: 90%;
   border: 2px solid rgb(104, 181, 104);
   display: flex;
-  justify-content:space-between;
+  justify-content: space-between;
 }
 
-.courseCard-container-left{
+.courseCard-container-left {
   background-color: white;
   display: flex;
   flex-direction: column;
@@ -23,7 +22,7 @@
   padding: 10px;
 }
 
-.courseCard-container-right{
+.courseCard-container-right {
   background-color: white;
   display: flex;
   flex-direction: column;
@@ -33,7 +32,7 @@
   padding: 10px;
 }
 
-.courseCard-container-right-text{
+.courseCard-container-right-text {
   background-color: white;
   display: flex;
   flex-direction: column;
@@ -42,7 +41,7 @@
   padding: 10px;
 }
 
-.button-container{
+.button-container {
   display: flex;
   width: 100%;
   justify-content: center;

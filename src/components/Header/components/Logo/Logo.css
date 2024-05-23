@@ -1,19 +1,19 @@
 :root {
-  --header-height: 40px; 
+  --header-height: 40px;
 }
 .logo {
   display: flex;
   align-items: center;
   position: absolute;
-  left: -10px;
-  top: -24px;
-  width: calc(var(--header-height) * 2); 
+  left: 5px;
+  top: -5px;
+  width: calc(var(--header-height));
   height: auto;
 }
 
-.banner{
-  width: calc(var(--header-height)*3.5);
-  height: calc(var(--header-height)*0.7);
+.banner {
+  width: calc(var(--header-height) * 3.5);
+  height: calc(var(--header-height) * 0.7);
   border-radius: 4px;
   display: flex;
   align-items: center;
@@ -21,7 +21,7 @@
   background-color: rgb(64, 67, 70);
 }
 
-.banner-content{
+.banner-content {
   margin: 0;
   font-size: 18px;
   margin-inline: 15px;
