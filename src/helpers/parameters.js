@@ -1,0 +1,4 @@
+export const PARAMETERS = {
+  AUTHOR_MIN_LENGTH: 4,
+  DESCRIPTION_MIN_LENGTH: 2,
+};
