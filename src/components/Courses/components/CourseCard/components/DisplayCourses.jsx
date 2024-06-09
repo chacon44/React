@@ -4,7 +4,7 @@ const DisplayCourses = ({ course, authors }) => {
   let courseAuthorsNames = "";
   if (course && course.authors) {
     courseAuthorsNames = course.authors
-      .filter((authorId) => authorId !== undefined)
+      .filter(Boolean)
       .map((authorId) => authors.find((author) => author.id === authorId)?.name)
       .join(", ");
   }

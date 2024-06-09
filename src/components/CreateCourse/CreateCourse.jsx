@@ -3,10 +3,13 @@ import Input from "../../common/Input/Input";
 import Button from "../../common/Button/Button";
 import { formatDuration } from "../../common/Tools/formatDuration.jsx";
 import "./CreateCourse.css";
-import { AddAuthorToCourse } from "./components/AddAuthorToCourse.jsx";
-import { CreateAuthor } from "./components/CreateAuthor.jsx";
-import { RemoveAuthorFromSelectList } from "./components/RemoveAuthorFromSelectList.jsx";
-import { CreateNewCourse } from "./components/CreateNewCourse.jsx";
+import {
+  CreateNewCourse,
+  AddAuthorToCourse,
+  CreateAuthor,
+  RemoveAuthorFromSelectList
+} from "./helpers/author.helpers.js";
+
 import {
   BUTTON_TEXT,
   LABEL_TEXT,
