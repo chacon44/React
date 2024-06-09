@@ -74,9 +74,4 @@
   height: 110px;
   width: 10px;
 }
-.input-container {
-  display: flex;
-  width: 90%;
-  justify-content: baseline;
-  align-items: baseline;
-}
+

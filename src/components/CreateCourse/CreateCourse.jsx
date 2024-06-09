@@ -79,14 +79,13 @@ export const CreateCourse = ({ onCourseCreated }) => {
       <div className="third-block">
         <div className="third-block-left">
           <div className="title-container">{LABEL_TEXT.ADD_AUTHOR}</div>
-          <div className="input-container">
-            <Input
-              labelText={LABEL_TEXT.AUTHOR_NAME}
-              placeholderText={PLACEHOLDER_TEXT.AUTHOR_NAME}
-              value={newAuthorName}
-              onChange={(e) => setNewAuthorName(e.target.value)}
-            />
-          </div>
+          <Input
+            labelText={LABEL_TEXT.AUTHOR_NAME}
+            placeholderText={PLACEHOLDER_TEXT.AUTHOR_NAME}
+            value={newAuthorName}
+            onChange={(e) => setNewAuthorName(e.target.value)}
+          />
+
           <Button
             buttonText={BUTTON_TEXT.CREATE_AUTHOR}
             onClick={handleCreateAuthor}
@@ -95,14 +94,14 @@ export const CreateCourse = ({ onCourseCreated }) => {
           <div className="empty-space"></div>
 
           <div className="title-container">{LABEL_TEXT.DURATION}</div>
-          <div className="input-container">
-            <Input
-              labelText={LABEL_TEXT.DURATION}
-              placeholderText={PLACEHOLDER_TEXT.DURATION}
-              value={duration}
-              onChange={(e) => setDuration(e.target.value)}
-            />
-          </div>
+
+          <Input
+            labelText={LABEL_TEXT.DURATION}
+            placeholderText={PLACEHOLDER_TEXT.DURATION}
+            value={duration}
+            onChange={(e) => setDuration(e.target.value)}
+          />
+
           <div className="duration">Duration: {formatDuration(duration)}</div>
         </div>
 

@@ -5,9 +5,3 @@
   justify-content: space-between;
   align-items: end;
 }
-
-.input-container {
-  display: flex;
-  justify-content: baseline;
-  align-items: baseline;
-}

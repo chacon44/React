@@ -3,17 +3,18 @@ import "./Input.css";
 
 const Input = ({ labelText, placeholderText, value, onChange }) => {
   return (
-    <div className="custom-input">
-      <label>
-        {labelText}
-        <br />
+    <label className="input-label">
+      {labelText}
+      <br />
+      <div className="input-container">
         <input
+          className="custom-input"
           placeholder={placeholderText}
           value={value}
           onChange={onChange}
         />
-      </label>
-    </div>
+      </div>
+    </label>
   );
 };
 

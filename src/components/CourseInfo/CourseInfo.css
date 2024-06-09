@@ -1,0 +1,22 @@
+.link-aligner {
+  width: 100%;
+  display: inline;
+  align-items: flex-end;
+}
+
+.full-screen-container {
+  align-items: baseline;
+}
+
+.title-container {
+  display: flex;
+}
+
+.internal-vertical-aligner {
+  width: 100%;
+  padding: 20px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

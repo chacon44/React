@@ -3,9 +3,11 @@ import "./Button.css";
 
 const Button = ({ buttonText, onClick }) => {
   return (
-    <button className="button" onClick={onClick}>
-      {buttonText}
-    </button>
+    <div className="button-container">
+      <button className="button" onClick={onClick}>
+        {buttonText}
+      </button>
+    </div>
   );
 };
 
