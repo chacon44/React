@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Input from "../../common/Input/Input";
 import Button from "../../common/Button/Button";
 import Header from "../Header/Header";
@@ -9,6 +10,7 @@ import "./Registration.css";
 import {
   BUTTON_TEXT,
   LABEL_TEXT,
+  MESSAGES,
   OTHER,
   PLACEHOLDER_TEXT,
   URI
@@ -18,38 +20,59 @@ const Registration = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const response = await fetch("http://localhost:4000/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ name, email, password })
+    });
+
+    if (response.ok) {
+      navigate(URI.LOGIN);
+    } else {
+      alert(MESSAGES.REGISTRATION_PROBLEM);
+    }
+  };
   return (
     <div className="vertical-aligner">
       <Header />
       <div className="full-screen-container">
         <div className="vertical-aligner">
           <div className="title-container">{LABEL_TEXT.REGISTRATION}</div>
-          <Input
-            labelText={LABEL_TEXT.USER_NAME}
-            placeholderText={PLACEHOLDER_TEXT.USER_NAME}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <Input
-            labelText={LABEL_TEXT.USER_EMAIL}
-            placeholderText={PLACEHOLDER_TEXT.USER_EMAIL}
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <Input
-            labelText={LABEL_TEXT.USER_PASSWORD}
-            placeholderText={PLACEHOLDER_TEXT.USER_PASSWORD}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <Button buttonText={BUTTON_TEXT.REGISTER} />
-          <div>
-            {OTHER.LOGIN_TEXT}
-            <Link to={URI.LOGIN} className="login-button">
-              {BUTTON_TEXT.LOGIN}
-            </Link>
-          </div>
+          <form onSubmit={handleSubmit}>
+            <Input
+              labelText={LABEL_TEXT.USER_NAME}
+              placeholderText={PLACEHOLDER_TEXT.USER_NAME}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <Input
+              labelText={LABEL_TEXT.USER_EMAIL}
+              placeholderText={PLACEHOLDER_TEXT.USER_EMAIL}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <Input
+              labelText={LABEL_TEXT.USER_PASSWORD}
+              placeholderText={PLACEHOLDER_TEXT.USER_PASSWORD}
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <Button type="submit" buttonText={BUTTON_TEXT.REGISTER} />
+            <div>
+              {OTHER.LOGIN_TEXT}
+              <Link to={URI.LOGIN} className="login-button">
+                {BUTTON_TEXT.LOGIN}
+              </Link>
+            </div>
+          </form>
         </div>
       </div>
     </div>

@@ -23,6 +23,7 @@ export const PLACEHOLDER_TEXT = {
 
 export const LABEL_TEXT = {
   TITLE: "Title",
+  ID: "Id: ",
   DESCRIPTION: "Description",
   AUTHOR_NAME: "Author name",
   DURATION: "Duration",
@@ -38,6 +39,7 @@ export const LABEL_TEXT = {
 
 export const USER_INFO = {
   USERNAME: "Antonio Chacon",
+  USER_TOKEN: "User Token",
 };
 
 export const BANNER_TEXT = {
@@ -52,6 +54,12 @@ export const MESSAGES = {
     `The author's name must be at least ${minLength} characters long and cannot be empty.`,
   DUPLICATED_AUTHOR: "An author with this name already exists.",
   NOT_VALID_COURSE: "Please fill out all fields correctly.",
+  UNKNOWN_AUTHOR: "Unknown author",
+  LOADING_AUTHORS: "Loading authors...",
+  REGISTRATION_PROBLEM: "There was a problem while registrating",
+  LOGIN_ERROR: "Missing Token or User",
+  LOGIN_FAILED: "Fail status:",
+  UNEXPECTED_ERROR: "Unexpected error",
 };
 
 export const URI = {
