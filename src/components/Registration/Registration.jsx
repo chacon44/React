@@ -1,81 +1,123 @@
-/* eslint-disable prettier/prettier */
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Input from "../../common/Input/Input";
-import Button from "../../common/Button/Button";
-import Header from "../Header/Header";
-import { Link } from "react-router-dom";
-import "../../common/Styles/CommonStyles.css";
-import "./Registration.css";
+import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+
+import Button from '../../common/Button/Button';
+import Input from '../../common/Input/Input';
+
+import classes from './Registration.module.css';
 import {
   BUTTON_TEXT,
-  LABEL_TEXT,
-  MESSAGES,
-  OTHER,
   PLACEHOLDER_TEXT,
-  URI
-} from "../../helpers/constants";
+  LABEL_TEXT,
+  ALERT_TEXT,
+  HEADER_TEXT,
+  LINK_TEXT,
+} from './registrationStrings';
 
 const Registration = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const [userName, setUserName] = useState('');
+  const [userEmail, setUserEmail] = useState('');
+  const [userPassword, setUserPassword] = useState('');
 
-    const response = await fetch("http://localhost:4000/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ name, email, password })
-    });
-
-    if (response.ok) {
-      navigate(URI.LOGIN);
-    } else {
-      alert(MESSAGES.REGISTRATION_PROBLEM);
+function isValidUserData() {
+    if (typeof userName !== 'string' || userName.trim() === '') {
+      alert(ALERT_TEXT.INVALID_NAME);
+      return false;
     }
-  };
+    if (typeof userEmail !== 'string' || userEmail.trim() === '') {
+      alert(ALERT_TEXT.INVALID_EMAIL);
+      return false;
+    }
+    if (typeof userPassword !== 'string' || userPassword.length <= 6) {
+      alert(ALERT_TEXT.INVALID_PASSWORD);
+      return false;
+    }
+    return true;
+  }
+
+  async function registrationOnSubmitHandler(e) {
+    e.preventDefault();
+    if (!isValidUserData()) {
+      return;
+    }
+
+    const newUser = {
+      name: userName,
+      email: userEmail,
+      password: userPassword,
+	};
+	  
+    try {
+      const response = await fetch('http://localhost:4000/register', {
+        method: 'POST',
+        body: JSON.stringify(newUser),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const result = await response.json();
+      console.log(result);
+
+      if (result.successful) {
+        navigate('/login');
+      } else {
+        alert(result.message || 'Registration failed.');
+      }
+    } catch (error) {
+      console.error('Error during registration:', error);
+      alert('An error occurred during registration. Please try again.');
+    }
+  }
+
   return (
-    <div className="vertical-aligner">
-      <Header />
-      <div className="full-screen-container">
-        <div className="vertical-aligner">
-          <div className="title-container">{LABEL_TEXT.REGISTRATION}</div>
-          <form onSubmit={handleSubmit}>
-            <Input
-              labelText={LABEL_TEXT.USER_NAME}
-              placeholderText={PLACEHOLDER_TEXT.USER_NAME}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            <Input
-              labelText={LABEL_TEXT.USER_EMAIL}
-              placeholderText={PLACEHOLDER_TEXT.USER_EMAIL}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <Input
-              labelText={LABEL_TEXT.USER_PASSWORD}
-              placeholderText={PLACEHOLDER_TEXT.USER_PASSWORD}
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <Button type="submit" buttonText={BUTTON_TEXT.REGISTER} />
-            <div>
-              {OTHER.LOGIN_TEXT}
-              <Link to={URI.LOGIN} className="login-button">
-                {BUTTON_TEXT.LOGIN}
-              </Link>
-            </div>
-          </form>
+    <div className={classes.formWrapper}>
+      <form
+        className={classes.registrationForm}
+        onSubmit={registrationOnSubmitHandler}
+      >
+        <h3>{HEADER_TEXT.REGISTRATION}</h3>
+        <div className={classes.inputBlock}>
+          <Input
+            name='registrationUserName'
+            labelText={LABEL_TEXT.NAME}
+            type='text'
+            value={userName}
+            placeholderText={PLACEHOLDER_TEXT.ENTER_NAME}
+            onChange={(e) => setUserName(e.target.value)}
+          />
         </div>
-      </div>
+        <div className={classes.inputBlock}>
+          <Input
+            name='registrationUserEmail'
+            labelText={LABEL_TEXT.EMAIL}
+            type='email'
+            value={userEmail}
+            placeholderText={PLACEHOLDER_TEXT.ENTER_EMAIL}
+            onChange={(e) => setUserEmail(e.target.value)}
+          />
+        </div>
+        <div className={classes.inputBlock}>
+          <Input
+            name='registrationUserPass'
+            labelText={LABEL_TEXT.PASSWORD}
+            type='password'
+            value={userPassword}
+            placeholderText={PLACEHOLDER_TEXT.ENTER_PASSWORD}
+            onChange={(e) => setUserPassword(e.target.value)}
+          />
+        </div>
+
+        <Button type='submit' buttonText={BUTTON_TEXT.REGISTER} />
+        <h4>
+          <span>{LINK_TEXT.LOGIN_PROMPT}</span>
+          <Link to='/login'>{LINK_TEXT.LOGIN}</Link>
+        </h4>
+      </form>
     </div>
   );
 };
+
 export default Registration;

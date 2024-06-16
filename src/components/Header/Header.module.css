@@ -1,6 +1,7 @@
+
 .header {
   margin-top: 2px;
-  height: 5vh;
+  height: 10vh;
   width: 95vw;
   overflow: hidden;
   display: flex;
@@ -9,16 +10,8 @@
   border: 2px solid rgb(255, 98, 98);
 }
 
-.user-info {
+.userBlock {
   display: flex;
   align-items: center;
   margin-left: auto;
-}
-
-.user-name {
-  margin: 0;
-  font-size: 18px;
-  margin-inline: 20px;
-  font-weight: 500;
-  color: #333;
 }

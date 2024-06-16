@@ -1,65 +1,41 @@
-import React, { useState, useEffect } from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-  useNavigate,
-  useLocation,
-} from "react-router-dom";
-import { CourseAuthorProvider } from "./helpers/CourseAuthorStore";
-import CreateCourse from "./components/CreateCourse/CreateCourse";
-import Courses from "./components/Courses/Courses";
-import Registration from "./components/Registration/Registration.jsx";
-import Login from "./components/Login/Login.jsx";
-import CourseInfo from "./components/CourseInfo/CourseInfo";
-import "./App.css";
-import { URI, USER_INFO } from "./helpers/constants.js";
+import { useEffect, useState } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-const App = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
+import Header from './components/Header/Header';
+import Login from './components/Login/Login';
+import Registration from './components/Registration/Registration';
+import Courses from './components/Courses/Courses';
+import CreateCourse from './components/CreateCourse/CreateCourse';
+import CourseInfo from './components/CourseInfo/CourseInfo';
 
-  useEffect(() => {
-    const token = localStorage.getItem(USER_INFO.USER_TOKEN);
-    const isAuthPage =
-      location.pathname === URI.LOGIN || location.pathname === URI.REGISTRATION;
+import './App.css';
 
-    if (token && isAuthPage) {
-      navigate(URI.COURSE_LIST);
-    }
-  }, [navigate, location.pathname]);
+function App() {
+	const [userName, setUserName] = useState('');
+	const isUserLogged = localStorage.getItem('token') != null;
 
-  return (
-    <>
-      <Routes>
-        <Route path={URI.REGISTRATION} element={<Registration />} />
-        <Route path={URI.LOGIN} element={<Login />} />
-        <Route path={URI.COURSE_INFO} element={<CourseInfo />} />
-        <Route
-          path={URI.COURSE_CREATION}
-          element={
-            <CreateCourse onCourseCreated={() => navigate(URI.COURSE_LIST)} />
-          }
-        />
-        <Route
-          path={URI.COURSE_LIST}
-          element={
-            <Courses onAddCourse={() => navigate(URI.COURSE_CREATION)} />
-          }
-        />
-        <Route path="*" element={<Navigate to={URI.LOGIN} />} />
-      </Routes>
-    </>
-  );
-};
+	useEffect(() => {
+		const tokenItem = JSON.parse(localStorage.getItem('token'));
+		if (tokenItem) {
+			setUserName(tokenItem.user.name);
+		}
+	}, []);
 
-const AppWrapper = () => (
-  <Router>
-    <CourseAuthorProvider>
-      <App />
-    </CourseAuthorProvider>
-  </Router>
-);
+	return (
+		<BrowserRouter>
+			<div className='App'>
+				<Header userName={userName} setUserName={setUserName} />
+				<Routes>
+					<Route path='/' element={isUserLogged ? <Courses /> : <Login />} />
+					<Route path='/registration' element={<Registration />} />
+					<Route path='/login' element={<Login setUserName={setUserName} />} />
+					<Route path='/courses' element={<Courses />} />
+					<Route path='/courses/add' element={<CreateCourse />} />
+					<Route path='/courses/:id' element={<CourseInfo />} />
+				</Routes>
+			</div>
+		</BrowserRouter>
+	);
+}
 
-export default AppWrapper;
+export default App;

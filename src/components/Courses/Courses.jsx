@@ -1,29 +1,53 @@
-import React, { useState } from "react";
-import { useCourseAuthorContext } from "../../helpers/CourseAuthorStore";
-import SearchBar from "./components/SearchBar/SearchBar";
-import CourseCard from "./components/CourseCard/CourseCard";
-import Button from "../../common/Button/Button";
-import { BUTTON_TEXT } from "../../helpers/constants";
+import { Fragment, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const Courses = ({ onAddCourse }) => {
-  const { courses } = useCourseAuthorContext();
-  const [filteredCourses, setFilteredCourses] = useState(courses);
+import SearchBar from './components/SearchBar/SearchBar';
+import CourseCard from './components/CourseCard/CourseCard';
+import Button from '../../common/Button/Button';
 
-  return (
-    <div className="courses-container">
-      <div className="first-block">
-        <SearchBar courses={courses} setFilteredCourses={setFilteredCourses} />
-        <Button buttonText={BUTTON_TEXT.ADD_COURSE} onClick={onAddCourse} />
-      </div>
-      <div>
-        {filteredCourses
-          .filter((course) => course.title)
-          .map((course) => (
-            <CourseCard key={course.id} course={course} />
-          ))}
-      </div>
-    </div>
-  );
-};
+import { mockedCoursesList } from '../../constants';
+
+import styles from './Courses.module.css';
+
+function Courses() {
+	const navigate = useNavigate();
+
+	const createCourseButtonHandler = () => {
+		navigate('/courses/add');
+	};
+
+	const [search, setSearch] = useState('');
+
+	const filteredCourseList = mockedCoursesList.filter(
+		(course) =>
+			course.title.toLowerCase().includes(search.toLowerCase()) ||
+			course.id.toLowerCase().includes(search.toLowerCase())
+	);
+
+	return (
+		<Fragment>
+			<div className={styles.panel}>
+				<SearchBar searchMessage={setSearch} />
+				<Button
+					buttonText="Add Course"
+					onClick={createCourseButtonHandler}
+				/>
+			</div>
+			{filteredCourseList.map(
+				({ id, title, duration, creationDate, description, authors }) => (
+					<CourseCard
+						key={id}
+						id={id}
+						title={title}
+						duration={duration}
+						creationDate={creationDate}
+						description={description}
+						authors={authors}
+					/>
+				)
+			)}
+		</Fragment>
+	);
+}
 
 export default Courses;

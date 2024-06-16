@@ -1,107 +1,86 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import Input from "../../common/Input/Input";
-import Button from "../../common/Button/Button";
-import Header from "../Header/Header";
-import "../../common/Styles/CommonStyles.css";
-import "./Login.css";
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+
+import Button from '../../common/Button/Button';
+import Input from '../../common/Input/Input';
+
+import classes from './Login.module.css';
 import {
   BUTTON_TEXT,
-  LABEL_TEXT,
-  MESSAGES,
-  OTHER,
   PLACEHOLDER_TEXT,
-  URI,
-  USER_INFO,
-} from "../../helpers/constants";
+  LABEL_TEXT,
+  ALERT_TEXT,
+  HEADER_TEXT,
+  LINK_TEXT,
+} from './loginStrings';
 
-const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+const Login = ({ setUserName }) => {
   const navigate = useNavigate();
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    try {
-      const response = await fetchLogin({ email, password });
+  const [userEmail, setUserEmail] = useState('');
+  const [userPassword, setUserPassword] = useState('');
 
-      if (response.ok) {
-        const result = await response.json();
-        handleLoginSuccess(result);
-      } else {
-        handleLoginFailure(response.status);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      setErrorMessage(MESSAGES.UNEXPECTED_ERROR);
-    }
-  };
+  function isValidUserData() {
+    return userEmail && userPassword;
+  }
 
-  const fetchLogin = async ({ email, password }) => {
-    return await fetch("http://localhost:4000/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
-  };
-
-  const handleLoginSuccess = (result) => {
-    if (result.successful && result.result) {
-      const token = result.result.replace("Bearer ", "");
-      localStorage.setItem(USER_INFO.USER_TOKEN, token);
-      if (result.user && result.user.name) {
-        localStorage.setItem(USER_INFO.USERNAME, result.user.name);
-        localStorage.setUserName(result.user.name);
-      }
-      navigate(URI.COURSE_LIST);
+  async function loginOnSubmitHandler(e) {
+    e.preventDefault();
+    if (!isValidUserData()) {
+      alert(ALERT_TEXT.FILL_ALL_FIELDS);
     } else {
-      console.error(MESSAGES.LOGIN_ERROR);
-      setErrorMessage(MESSAGES.LOGIN_ERROR);
-    }
-  };
+      const user = {
+        email: userEmail,
+        password: userPassword,
+      };
 
-  const handleLoginFailure = (status) => {
-    console.error(MESSAGES.LOGIN_FAILED, status);
-    setErrorMessage(`Fail status: ${status}`);
-  };
+      const response = await fetch('http://localhost:4000/login', {
+        method: 'POST',
+        body: JSON.stringify(user),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const result = await response.json();
+      if (result.successful) {
+        localStorage.setItem('token', JSON.stringify(result));
+        setUserName(result.user.name);
+        navigate('/courses');
+      }
+    }
+  }
 
   return (
-    <div className="vertical-aligner">
-      <Header />
-      <div className="full-screen-container">
-        <div className="vertical-aligner">
-          <div className="title-container">{LABEL_TEXT.LOGIN}</div>
-          <form onSubmit={handleSubmit}>
-            <Input
-              labelText={LABEL_TEXT.USER_EMAIL}
-              type="email"
-              placeholderText={PLACEHOLDER_TEXT.USER_EMAIL}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            <Input
-              labelText={LABEL_TEXT.USER_PASSWORD}
-              type="password"
-              placeholderText={PLACEHOLDER_TEXT.USER_PASSWORD}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            <Button type="submit" buttonText={BUTTON_TEXT.LOGIN} />
-            {errorMessage && <p className="error">{errorMessage}</p>}
-            <div>
-              {OTHER.REGISTER_TEXT}
-              <Link to={URI.REGISTRATION} className="registration-button">
-                {BUTTON_TEXT.REGISTER}
-              </Link>
-            </div>
-          </form>
+    <div className={classes.formWrapper}>
+      <form className={classes.loginForm} onSubmit={loginOnSubmitHandler}>
+        <h3>{HEADER_TEXT.LOGIN}</h3>
+        <div className={classes.inputBlock}>
+          <Input
+            name='loginUserEmail'
+            labelText={LABEL_TEXT.EMAIL}
+            type='email'
+            value={userEmail}
+            placeholderText={PLACEHOLDER_TEXT.ENTER_EMAIL}
+            onChange={(e) => setUserEmail(e.target.value)}
+          />
         </div>
-      </div>
+        <div className={classes.inputBlock}>
+          <Input
+            name='loginUserPass'
+            labelText={LABEL_TEXT.PASSWORD}
+            type='password'
+            value={userPassword}
+            placeholderText={PLACEHOLDER_TEXT.ENTER_PASSWORD}
+            onChange={(e) => setUserPassword(e.target.value)}
+          />
+        </div>
+
+        <Button type='submit' buttonText={BUTTON_TEXT.LOGIN} />
+        <h4>
+          <span>{LINK_TEXT.REGISTRATION_PROMPT}</span>
+          <Link to='/registration'>{LINK_TEXT.REGISTRATION}</Link>
+        </h4>
+      </form>
     </div>
   );
 };
