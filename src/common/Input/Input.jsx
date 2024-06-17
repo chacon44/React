@@ -1,6 +1,7 @@
 import React from "react";
 import "./Input.css";
 
+<<<<<<< HEAD
 const Input = ({ labelText, placeholderText, value, onChange }) => {
   return (
     <label className="input-label">
@@ -15,6 +16,22 @@ const Input = ({ labelText, placeholderText, value, onChange }) => {
         />
       </div>
     </label>
+=======
+const Input = ({ labelText, placeholderText, value, onChange, type = 'input' }) => {
+  return (
+    <div className="custom-input">
+      <label>
+        {labelText}
+        <br />
+        <input
+          placeholder={placeholderText}
+          value={value}
+          onChange={onChange}
+          type={type}
+        />
+      </label>
+    </div>
+>>>>>>> Task1
   );
 };
 

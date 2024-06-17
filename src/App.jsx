@@ -5,7 +5,7 @@ import {
   Routes,
   Navigate,
   useNavigate,
-  useLocation,
+  useLocation
 } from "react-router-dom";
 import { CourseAuthorProvider } from "./helpers/CourseAuthorStore";
 import CreateCourse from "./components/CreateCourse/CreateCourse";

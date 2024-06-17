@@ -5,3 +5,12 @@
   justify-content: space-between;
   align-items: end;
 }
+<<<<<<< HEAD
+=======
+
+.input-container {
+  display: flex;
+  justify-content: baseline;
+  align-items: baseline;
+}
+>>>>>>> Task1

@@ -3,10 +3,20 @@ import Input from "../../common/Input/Input";
 import Button from "../../common/Button/Button";
 import { formatDuration } from "../../common/Tools/formatDuration.jsx";
 import "./CreateCourse.css";
+<<<<<<< HEAD
 import { AddAuthorToCourse } from "./components/AddAuthorToCourse.jsx";
 import { CreateAuthor } from "./components/CreateAuthor.jsx";
 import { RemoveAuthorFromSelectList } from "./components/RemoveAuthorFromSelectList.jsx";
 import { CreateNewCourse } from "./components/CreateNewCourse.jsx";
+=======
+import {
+  CreateNewCourse,
+  AddAuthorToCourse,
+  CreateAuthor,
+  RemoveAuthorFromSelectList
+} from "./helpers/author.helpers.js";
+
+>>>>>>> Task1
 import {
   BUTTON_TEXT,
   LABEL_TEXT,
@@ -79,6 +89,7 @@ export const CreateCourse = ({ onCourseCreated }) => {
       <div className="third-block">
         <div className="third-block-left">
           <div className="title-container">{LABEL_TEXT.ADD_AUTHOR}</div>
+<<<<<<< HEAD
           <Input
             labelText={LABEL_TEXT.AUTHOR_NAME}
             placeholderText={PLACEHOLDER_TEXT.AUTHOR_NAME}
@@ -86,6 +97,16 @@ export const CreateCourse = ({ onCourseCreated }) => {
             onChange={(e) => setNewAuthorName(e.target.value)}
           />
 
+=======
+          <div className="input-container">
+            <Input
+              labelText={LABEL_TEXT.AUTHOR_NAME}
+              placeholderText={PLACEHOLDER_TEXT.AUTHOR_NAME}
+              value={newAuthorName}
+              onChange={(e) => setNewAuthorName(e.target.value)}
+            />
+          </div>
+>>>>>>> Task1
           <Button
             buttonText={BUTTON_TEXT.CREATE_AUTHOR}
             onClick={handleCreateAuthor}
@@ -94,6 +115,7 @@ export const CreateCourse = ({ onCourseCreated }) => {
           <div className="empty-space"></div>
 
           <div className="title-container">{LABEL_TEXT.DURATION}</div>
+<<<<<<< HEAD
 
           <Input
             labelText={LABEL_TEXT.DURATION}
@@ -102,6 +124,16 @@ export const CreateCourse = ({ onCourseCreated }) => {
             onChange={(e) => setDuration(e.target.value)}
           />
 
+=======
+          <div className="input-container">
+            <Input
+              labelText={LABEL_TEXT.DURATION}
+              placeholderText={PLACEHOLDER_TEXT.DURATION}
+              value={duration}
+              onChange={(e) => setDuration(e.target.value)}
+            />
+          </div>
+>>>>>>> Task1
           <div className="duration">Duration: {formatDuration(duration)}</div>
         </div>
 

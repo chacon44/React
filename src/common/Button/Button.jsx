@@ -1,6 +1,7 @@
 import React from "react";
 import "./Button.css";
 
+<<<<<<< HEAD
 const Button = ({ buttonText, onClick }) => {
   return (
     <div className="button-container">
@@ -8,6 +9,13 @@ const Button = ({ buttonText, onClick }) => {
         {buttonText}
       </button>
     </div>
+=======
+const Button = ({ buttonText, onClick, type = 'button' }) => {
+  return (
+    <button className="button" onClick={onClick} type={type}>
+      {buttonText}
+    </button>
+>>>>>>> Task1
   );
 };
 

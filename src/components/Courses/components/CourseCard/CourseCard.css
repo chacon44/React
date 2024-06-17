@@ -41,7 +41,15 @@
   padding: 10px;
 }
 
+<<<<<<< HEAD
 
+=======
+.button-container {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+>>>>>>> Task1
 .card-title {
   font-size: 24px;
   font-weight: bold;
