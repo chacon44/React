@@ -1,22 +1,22 @@
 .formWrapper {
-    height: 80vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .registrationForm {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 label {
-    display: block;
+  display: block;
 }
 
 button {
-    margin-top: 20px;
+  margin-top: 20px;
 }

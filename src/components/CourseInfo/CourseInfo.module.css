@@ -1,25 +1,25 @@
 .courseInfoWrapper {
-    padding: 20px;
+  padding: 20px;
 }
 
 button {
-    width: 200px;
+  width: 200px;
 }
 
 .title {
-    width: 100%;
-    text-align: center;
+  width: 100%;
+  text-align: center;
 }
 
 .courseInfo {
-    display: flex;
-    gap: 20px;
+  display: flex;
+  gap: 20px;
 }
 
 .leftBlock {
-    width: 60%;
+  width: 60%;
 }
 
 .rightBlock {
-    width: 40%;
+  width: 40%;
 }

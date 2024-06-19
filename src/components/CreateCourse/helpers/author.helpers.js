@@ -6,7 +6,7 @@ export const AddAuthorToCourse = (
   authorId,
   authors,
   courseAuthors,
-  setCourseAuthors
+  setCourseAuthors,
 ) => {
   const authorToAdd = authors.find((author) => author.id === authorId);
 
@@ -20,12 +20,11 @@ export const AddAuthorToCourse = (
   setCourseAuthors((prevAuthors) => [...prevAuthors, authorToAdd]);
 };
 
-
 export const CreateAuthor = (
   newAuthorName,
   authors,
   addAuthor,
-  setNewAuthorName
+  setNewAuthorName,
 ) => {
   if (
     !newAuthorName.trim() ||
@@ -36,7 +35,7 @@ export const CreateAuthor = (
   }
 
   const existingAuthor = authors.find(
-    (author) => author.name.toLowerCase() === newAuthorName.toLowerCase()
+    (author) => author.name.toLowerCase() === newAuthorName.toLowerCase(),
   );
   if (existingAuthor) {
     alert(MESSAGES.DUPLICATED_AUTHOR);
@@ -48,14 +47,13 @@ export const CreateAuthor = (
   setNewAuthorName("");
 };
 
-
 export const CreateNewCourse = (
   title,
   description,
   duration,
   courseAuthors,
   addCourse,
-  onCourseCreated
+  onCourseCreated,
 ) => {
   if (
     !title.trim() ||
@@ -84,7 +82,7 @@ export const RemoveAuthorFromSelectList = (
   courseAuthors,
   setCourseAuthors,
   authors,
-  setAuthors
+  setAuthors,
 ) => {
   const authorToRemove = courseAuthors.find((author) => author.id === authorId);
 

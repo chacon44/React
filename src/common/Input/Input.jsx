@@ -10,7 +10,7 @@ function Input(props) {
     labelText = "",
     value,
     name,
-    type
+    type,
   } = props;
 
   // 	Use of Fragment
@@ -38,6 +38,6 @@ Input.propTypes = {
   type: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   placeholder: PropTypes.string,
-  onChange: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired,
 };
 export default Input;

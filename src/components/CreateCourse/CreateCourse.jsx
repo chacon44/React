@@ -15,7 +15,7 @@ import {
   PLACEHOLDER_TEXT,
   LABEL_TEXT,
   getAlertText,
-  PARAMETERS
+  PARAMETERS,
 } from "./createCourseStrings";
 
 function CreateCourse() {
@@ -33,14 +33,14 @@ function CreateCourse() {
   function addCourseAuthor(author) {
     setSelectedAuthorsList([...selectedAuthorsList, author]);
     setAuthorsList((current) =>
-      current.filter((item) => item.name !== author.name)
+      current.filter((item) => item.name !== author.name),
     );
   }
 
   function deleteCourseAuthor(author) {
     setAuthorsList([...authorsList, author]);
     setSelectedAuthorsList((current) =>
-      current.filter((item) => item.name !== author.name)
+      current.filter((item) => item.name !== author.name),
     );
   }
 
@@ -51,7 +51,7 @@ function CreateCourse() {
     }
     const newAuthor = {
       id: uuidv4(),
-      name: author
+      name: author,
     };
     setAuthorsList([...authorsList, newAuthor]);
     mockedAuthorsList.push(newAuthor);
@@ -96,7 +96,7 @@ function CreateCourse() {
         description: description,
         creationDate: new Date().toLocaleDateString(),
         duration: duration,
-        authors: selectedAuthorsList.map((course) => course.id)
+        authors: selectedAuthorsList.map((course) => course.id),
       };
       mockedCoursesList.push(newCourse);
       navigate("/");
