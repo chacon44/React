@@ -1,5 +1,6 @@
 
 .header {
+<<<<<<< HEAD
   margin-top: 2px;
   height: 10vh;
   width: 95vw;
@@ -8,6 +9,15 @@
   align-items: center;
   background-color: #f8f9fa;
   border: 2px solid rgb(255, 98, 98);
+=======
+  height: 50px;
+  width: 95%;
+  display: flex;
+  align-items: center;
+  padding: 0px 5px;
+  background-color: #f8f9fa;
+  border: 1px solid rgb(255, 98, 98);
+>>>>>>> Task1
 }
 
 .userBlock {
