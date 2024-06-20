@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .App {
   text-align: center;
 }
@@ -35,4 +36,20 @@
   to {
     transform: rotate(360deg);
   }
+=======
+.courses-container {
+  width: 95%;
+  height: 100%;
+  border: 1px solid blue;
+  padding: 0px 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.first-block {
+  width: 95%;
+  margin: 5px;
+  display: flex;
+  justify-content: space-between;
+>>>>>>> Task1
 }
