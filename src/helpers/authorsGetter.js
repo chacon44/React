@@ -1,15 +1,15 @@
-import { mockedAuthorsList } from '../constants';
+import { mockedAuthorsList } from "../constants";
 
 export default function getAuthors(authorsIdArray) {
-	const authorsArray = [];
+  const authorsArray = [];
 
-	authorsIdArray.forEach((authorId) =>
-		mockedAuthorsList.forEach((author) => {
-			if (author.id === authorId) {
-				authorsArray.push(author.name);
-			}
-		})
-	);
+  authorsIdArray.forEach((authorId) =>
+    mockedAuthorsList.forEach((author) => {
+      if (author.id === authorId) {
+        authorsArray.push(author.name);
+      }
+    }),
+  );
 
-	return authorsArray;
+  return authorsArray;
 }

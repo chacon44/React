@@ -1,14 +1,14 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
 
-import Button from '../../common/Button/Button';
-import Input from '../../common/Input/Input';
-import { mockedAuthorsList, mockedCoursesList } from '../../constants';
-import formatDuration from '../../helpers/formatDuration';
+import Button from "../../common/Button/Button";
+import Input from "../../common/Input/Input";
+import { mockedAuthorsList, mockedCoursesList } from "../../constants";
+import formatDuration from "../../helpers/formatDuration";
 
-import styles from './CreateCourse.module.css';
-import Author from './components/Author';
+import styles from "./CreateCourse.module.css";
+import Author from "./components/Author";
 
 import {
   BUTTON_TEXT,
@@ -16,15 +16,15 @@ import {
   LABEL_TEXT,
   getAlertText,
   PARAMETERS,
-} from './createCourseStrings';
+} from "./createCourseStrings";
 
 function CreateCourse() {
   const navigate = useNavigate();
 
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [newAuthor, setNewAuthor] = useState('');
-  const [duration, setDuration] = useState('');
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [newAuthor, setNewAuthor] = useState("");
+  const [duration, setDuration] = useState("");
   const [authorsList, setAuthorsList] = useState(mockedAuthorsList);
   const [selectedAuthorsList, setSelectedAuthorsList] = useState([]);
 
@@ -33,19 +33,19 @@ function CreateCourse() {
   function addCourseAuthor(author) {
     setSelectedAuthorsList([...selectedAuthorsList, author]);
     setAuthorsList((current) =>
-      current.filter((item) => item.name !== author.name)
+      current.filter((item) => item.name !== author.name),
     );
   }
 
   function deleteCourseAuthor(author) {
     setAuthorsList([...authorsList, author]);
     setSelectedAuthorsList((current) =>
-      current.filter((item) => item.name !== author.name)
+      current.filter((item) => item.name !== author.name),
     );
   }
 
   function createNewAuthor(author) {
-	  if (author.length < PARAMETERS.AUTHOR_MIN_LENGTH) {
+    if (author.length < PARAMETERS.AUTHOR_MIN_LENGTH) {
       alert(ALERT_TEXT.AUTHOR_NAME_TOO_SHORT);
       return;
     }
@@ -57,7 +57,7 @@ function CreateCourse() {
     mockedAuthorsList.push(newAuthor);
   }
 
-   function isValid() {
+  function isValid() {
     if (!title) {
       alert(ALERT_TEXT.TITLE_REQUIRED);
       return false;
@@ -80,15 +80,15 @@ function CreateCourse() {
     }
     return true;
   }
-	
+
   function cancelCourseCreationHandler() {
-    navigate('/courses');
+    navigate("/courses");
   }
-	
+
   function createCourseSubmitHandler() {
-	  if (!isValid()) {
-		        alert("problem");
-		  return;
+    if (!isValid()) {
+      alert("problem");
+      return;
     } else {
       const newCourse = {
         id: uuidv4(),
@@ -99,7 +99,7 @@ function CreateCourse() {
         authors: selectedAuthorsList.map((course) => course.id),
       };
       mockedCoursesList.push(newCourse);
-      navigate('/');
+      navigate("/");
     }
   }
 
@@ -108,9 +108,9 @@ function CreateCourse() {
       <div className={styles.titleBlock}>
         <div className={styles.inputTitle}>
           <Input
-            name='inputTitle'
+            name="inputTitle"
             labelText={LABEL_TEXT.TITLE}
-            type='text'
+            type="text"
             value={title}
             placeholderText={PLACEHOLDER_TEXT.ENTER_TITLE}
             onChange={(e) => setTitle(e.target.value)}
@@ -119,17 +119,17 @@ function CreateCourse() {
         <Button
           onClick={createCourseSubmitHandler}
           buttonText={BUTTON_TEXT.CREATE_COURSE}
-			  />
-		<Button
+        />
+        <Button
           onClick={cancelCourseCreationHandler}
           buttonText={BUTTON_TEXT.CANCEL}
         />
       </div>
       <div className={styles.createDescriptionBlock}>
-        <label htmlFor='createDescription'>{LABEL_TEXT.DESCRIPTION}</label>
+        <label htmlFor="createDescription">{LABEL_TEXT.DESCRIPTION}</label>
         <textarea
-          name='createDescription'
-          type='text'
+          name="createDescription"
+          type="text"
           placeholder={PLACEHOLDER_TEXT.ENTER_DESCRIPTION}
           onChange={(e) => setDescription(e.target.value)}
         />
@@ -139,9 +139,9 @@ function CreateCourse() {
           <div className={styles.addAuthor}>
             <h3>Add author</h3>
             <Input
-              name='addAuthorName'
+              name="addAuthorName"
               labelText={LABEL_TEXT.AUTHOR_NAME}
-              type='text'
+              type="text"
               value={newAuthor}
               placeholderText={PLACEHOLDER_TEXT.ENTER_AUTHOR_NAME}
               onChange={(e) => setNewAuthor(e.target.value)}
@@ -154,14 +154,14 @@ function CreateCourse() {
           <div className={styles.addDuration}>
             <h3>Duration</h3>
             <Input
-              name='addDuration'
+              name="addDuration"
               labelText={LABEL_TEXT.DURATION}
-              type='number'
+              type="number"
               value={duration}
               placeholderText={PLACEHOLDER_TEXT.ENTER_DURATION}
               onChange={(e) => setDuration(e.target.value)}
             />
-                        <h2>Duration: {formatDuration(duration)} hours</h2>
+            <h2>Duration: {formatDuration(duration)} hours</h2>
           </div>
         </div>
         <div className={styles.rightBlock}>
