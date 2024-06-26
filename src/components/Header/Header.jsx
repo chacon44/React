@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 
 import Button from "../../common/Button/Button";
 import Logo from "./components/Logo/Logo";
-import { BUTTON_TEXT_LOGOUT } from "../../constants.js";
 
 import styles from "./Header.module.css";
 

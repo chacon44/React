@@ -57,7 +57,7 @@ function CreateCourse() {
     mockedAuthorsList.push(newAuthor);
   }
 
-  function isValid() {
+  function isValidCreateCoursePayload() {
     if (!title) {
       alert(ALERT_TEXT.TITLE_REQUIRED);
       return false;
@@ -86,10 +86,7 @@ function CreateCourse() {
   }
 
   function createCourseSubmitHandler() {
-    if (!isValid()) {
-      alert("problem");
-      return;
-    } else {
+    if (isValidCreateCoursePayload()) {
       const newCourse = {
         id: uuidv4(),
         title: title,
@@ -161,7 +158,7 @@ function CreateCourse() {
               placeholderText={PLACEHOLDER_TEXT.ENTER_DURATION}
               onChange={(e) => setDuration(e.target.value)}
             />
-            <h2>Duration: {formatDuration(duration)} hours</h2>
+            <h2>Duration: {formatDuration(duration)}</h2>
           </div>
         </div>
         <div className={styles.rightBlock}>

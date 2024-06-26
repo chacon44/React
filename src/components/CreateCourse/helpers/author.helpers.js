@@ -1,6 +1,5 @@
-import { MESSAGES } from "../../../helpers/constants";
+import { MESSAGES } from "../../../constants";
 import { v4 as uuidv4 } from "uuid";
-import { PARAMETERS } from "../../../helpers/parameters";
 
 export const AddAuthorToCourse = (
   authorId,
@@ -26,11 +25,8 @@ export const CreateAuthor = (
   addAuthor,
   setNewAuthorName,
 ) => {
-  if (
-    !newAuthorName.trim() ||
-    newAuthorName.trim().length < PARAMETERS.AUTHOR_MIN_LENGTH
-  ) {
-    alert(MESSAGES.AUTHOR_NOT_VALID(PARAMETERS.AUTHOR_MIN_LENGTH));
+  if (!newAuthorName.trim() || newAuthorName.trim().length < 4) {
+    alert(MESSAGES.AUTHOR_NOT_VALID("4"));
     return;
   }
 
@@ -57,7 +53,7 @@ export const CreateNewCourse = (
 ) => {
   if (
     !title.trim() ||
-    description.trim().length < PARAMETERS.DESCRIPTION_MIN_LENGTH ||
+    description.trim().length < 4 ||
     isNaN(Number(duration)) ||
     Number(duration) <= 0 ||
     courseAuthors.length === 0

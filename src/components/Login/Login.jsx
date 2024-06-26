@@ -19,9 +19,27 @@ const Login = ({ setUserName }) => {
 
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
+  const [errors, setErrors] = useState({});
+
+  function validateEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  function validatePassword(password) {
+    return password.length >= 6;
+  }
 
   function isValidUserData() {
-    return userEmail && userPassword;
+    const newErrors = {};
+    if (!validateEmail(userEmail)) {
+      newErrors.userEmail = "Invalid email format.";
+    }
+    if (!validatePassword(userPassword)) {
+      newErrors.userPassword = "Password must be at least 6 characters long.";
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   }
 
   async function loginOnSubmitHandler(e) {
@@ -46,6 +64,8 @@ const Login = ({ setUserName }) => {
         localStorage.setItem("token", JSON.stringify(result));
         setUserName(result.user.name);
         navigate("/courses");
+      } else {
+        alert(result.message || "Login failed");
       }
     }
   }
@@ -63,6 +83,9 @@ const Login = ({ setUserName }) => {
             placeholderText={PLACEHOLDER_TEXT.ENTER_EMAIL}
             onChange={(e) => setUserEmail(e.target.value)}
           />
+          {errors.userEmail && (
+            <div className={classes.error}>{errors.userEmail}</div>
+          )}
         </div>
         <div className={classes.inputBlock}>
           <Input
@@ -73,6 +96,9 @@ const Login = ({ setUserName }) => {
             placeholderText={PLACEHOLDER_TEXT.ENTER_PASSWORD}
             onChange={(e) => setUserPassword(e.target.value)}
           />
+          {errors.userPassword && (
+            <div className={classes.error}>{errors.userPassword}</div>
+          )}
         </div>
 
         <Button type="submit" buttonText={BUTTON_TEXT.LOGIN} />

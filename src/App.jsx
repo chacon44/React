@@ -8,8 +8,6 @@ import Courses from "./components/Courses/Courses";
 import CreateCourse from "./components/CreateCourse/CreateCourse";
 import CourseInfo from "./components/CourseInfo/CourseInfo";
 
-import "./App.css";
-
 function App() {
   const [userName, setUserName] = useState("");
   const isUserLogged = localStorage.getItem("token") != null;
@@ -23,7 +21,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div className="App">
+      <div>
         <Header userName={userName} setUserName={setUserName} />
         <Routes>
           <Route path="/" element={isUserLogged ? <Courses /> : <Login />} />

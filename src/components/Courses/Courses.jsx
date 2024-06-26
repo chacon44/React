@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import SearchBar from "./components/SearchBar/SearchBar";
@@ -25,7 +25,7 @@ function Courses() {
   );
 
   return (
-    <Fragment>
+    <>
       <div className={styles.panel}>
         <SearchBar searchMessage={setSearch} />
         <Button buttonText="Add Course" onClick={createCourseButtonHandler} />
@@ -43,7 +43,7 @@ function Courses() {
           />
         ),
       )}
-    </Fragment>
+    </>
   );
 }
 

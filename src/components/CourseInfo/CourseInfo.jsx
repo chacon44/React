@@ -44,9 +44,11 @@ const CourseInfo = () => {
               const foundAuthor = mockedAuthorsList.find(
                 (author) => author.id === authorId,
               );
-              return foundAuthor ? (
-                <Author key={foundAuthor.id} author={foundAuthor} />
-              ) : null;
+              return (
+                foundAuthor && (
+                  <Author key={foundAuthor.id} author={foundAuthor} />
+                )
+              );
             })}
           </ul>
         </div>
