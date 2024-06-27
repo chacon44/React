@@ -1,38 +1,43 @@
-import React from "react";
-import "./CourseCard.css";
-import Button from "../../../../common/Button/Button.jsx";
-import { BUTTON_TEXT } from "../../../../helpers/constants.js";
-import { formatDuration } from "../../../../common/Tools/formatDuration.jsx";
-import { useCourseAuthorContext } from "../../../../helpers/CourseAuthorStore.jsx";
-import DisplayCourses from "./components/DisplayCourses";
+import { Link } from "react-router-dom";
 
-const CourseCard = ({ course }) => {
-  const { authors } = useCourseAuthorContext();
+import Button from "../../../../common/Button/Button";
+import formatDuration from "../../../../helpers/formatDuration";
+import getAuthors from "../../../../helpers/authorsGetter";
+import dateFormater from "../../../../helpers/dateFormatter";
+
+import styles from "./CourseCard.module.css";
+
+function CourseCard(props) {
+  const { id, title, description, creationDate, duration, authors } = props;
+  const courseAuthors = getAuthors(authors).join(", ");
 
   return (
-    <div className="global-courseCard-container">
-      <div className="courseCard-container">
-        <div className="courseCard-container-left">
-          <h2 className="card-title">{course ? course.title : ""}</h2>
-          <p className="card-text">{course ? course.description : ""}</p>
-        </div>
-        <div className="courseCard-container-right">
-          <div className="courseCard-container-right-text">
-            <DisplayCourses course={course} authors={authors} />
-            <p className="card-meta">
-              Duration: {course ? formatDuration(course.duration) : ""}
-            </p>
-            <p className="card-meta">
-              Created: {course ? course.creationDate : ""}
-            </p>
-          </div>
-          <div className="button-container">
-            <Button buttonText={BUTTON_TEXT.SHOW_COURSE} />
-          </div>
+    <div className={styles.card}>
+      <div className={styles.cardLeft}>
+        <h2 className={styles.title}>{title}</h2>
+        <p className={styles.description}>{description}</p>
+      </div>
+      <div className={styles.cardRight}>
+        <p className={styles.authors}>
+          <strong>Authors: </strong>
+          {courseAuthors}
+        </p>
+        <p className={styles.duration}>
+          <b>Duration: </b>
+          {formatDuration(duration)}
+        </p>
+        <p className={styles.created}>
+          <strong>Created: </strong>
+          {dateFormater(creationDate)}
+        </p>
+        <div className={styles.buttonBlock}>
+          <Link to={`/courses/${id}`}>
+            <Button className="cardButton" buttonText="Show course"></Button>
+          </Link>
         </div>
       </div>
     </div>
   );
-};
+}
 
 export default CourseCard;

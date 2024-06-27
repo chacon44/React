@@ -1,0 +1,16 @@
+.header {
+  margin-top: 2px;
+  height: 10vh;
+  width: 95vw;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  background-color: #f8f9fa;
+  border: 2px solid rgb(255, 98, 98);
+}
+
+.userBlock {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}

@@ -1,42 +1,33 @@
-import React, { useState } from "react";
-import "./SearchBar.css";
-import Button from "../../../../common/Button/Button.jsx";
-import {
-  BUTTON_TEXT,
-  PLACEHOLDER_TEXT,
-} from "../../../../helpers/constants.js";
-import Input from "../../../../common/Input/Input.jsx";
+import { useState } from "react";
 
-const SearchBar = ({ courses, setFilteredCourses }) => {
-  const [searchTerm, setSearchTerm] = useState("");
+import Input from "../../../../common/Input/Input";
+import Button from "../../../../common/Button/Button";
 
-  const handleSearch = () => {
-    const filteredCourses = courses.filter(
-      (course) =>
-        course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        course.id.toString().includes(searchTerm),
-    );
-    setFilteredCourses(filteredCourses);
+import styles from "./SearchBar.module.css";
+
+function SearchBar({ searchMessage }) {
+  const [search, setSearch] = useState("");
+
+  const searchClicked = () => {
+    searchMessage(search);
   };
 
-  const handleInputChange = (event) => {
-    setSearchTerm(event.target.value);
-    if (event.target.value === "") {
-      setFilteredCourses(courses);
-    }
+  const searchText = (e) => {
+    setSearch(e.target.value);
+    !e.target.value && searchMessage("");
   };
 
   return (
-    <div className="search-container">
-      <div className="input-container">
-        <Input
-          placeholderText={PLACEHOLDER_TEXT.SEARCH_COURSE}
-          onChange={handleInputChange}
-        />
-      </div>
-      <Button onClick={handleSearch} buttonText={BUTTON_TEXT.SEARCH} />
+    <div className={styles.searchBar}>
+      <Input
+        name="searchBar"
+        value={search}
+        onChange={searchText}
+        placeholderText="Enter course name..."
+      />
+      <Button onClick={searchClicked} buttonText={"Search"} />
     </div>
   );
-};
+}
 
 export default SearchBar;

@@ -1,19 +1,28 @@
-import React from "react";
-import "./Header.css";
-import Logo from "./components/Logo/Logo";
-import Button from "../../common/Button/Button.jsx";
-import { USER_INFO, BUTTON_TEXT } from "../../helpers/constants.js";
+import { useNavigate } from "react-router-dom";
 
-const Header = () => {
+import Button from "../../common/Button/Button";
+import Logo from "./components/Logo/Logo";
+
+import styles from "./Header.module.css";
+
+function Header({ userName, setUserName }) {
+  const navigate = useNavigate();
+
+  function onLogoutHandler() {
+    localStorage.removeItem("token");
+    setUserName("");
+    navigate("/login");
+  }
+
   return (
-    <header className="header">
+    <div className={styles.header}>
       <Logo />
-      <div className="user-info">
-        <h2 className="user-name">{USER_INFO.USERNAME}</h2>
+      <div className={styles.userBlock}>
+        <h2 className={styles.user}>{userName || "No user logged"}</h2>
+        {userName && <Button buttonText={"Logout"} onClick={onLogoutHandler} />}
       </div>
-      <Button buttonText={BUTTON_TEXT.LOGOUT} />
-    </header>
+    </div>
   );
-};
+}
 
 export default Header;
