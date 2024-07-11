@@ -1,60 +1,78 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
-
+import { addCourse } from "../../store/courses/actions";
+import {
+  addAuthor,
+  saveAuthors,
+  deleteAuthor,
+} from "../../store/authors/actions";
+import { getAuthors as fetchAuthors } from "../../services";
 import Button from "../../common/Button/Button";
 import Input from "../../common/Input/Input";
-import { mockedAuthorsList, mockedCoursesList } from "../../constants";
 import formatDuration from "../../helpers/formatDuration";
-
 import styles from "./CreateCourse.module.css";
-import Author from "./components/Author";
-
 import {
   BUTTON_TEXT,
   PLACEHOLDER_TEXT,
   LABEL_TEXT,
   getAlertText,
   PARAMETERS,
+  TITLE_TEXT,
 } from "./createCourseStrings";
+import { PATH_URIS } from "../../constants";
 
 function CreateCourse() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const authors = useSelector((state) => state.authors);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [newAuthor, setNewAuthor] = useState("");
   const [duration, setDuration] = useState("");
-  const [authorsList, setAuthorsList] = useState(mockedAuthorsList);
+  const [authorsList, setAuthorsList] = useState([]);
   const [selectedAuthorsList, setSelectedAuthorsList] = useState([]);
 
   const ALERT_TEXT = getAlertText();
 
+  useEffect(() => {
+    const fetchAndSetAuthors = async () => {
+      const authors = await fetchAuthors();
+      dispatch(saveAuthors(authors));
+      setAuthorsList(authors);
+    };
+
+    fetchAndSetAuthors();
+  }, [dispatch]);
+
   function addCourseAuthor(author) {
     setSelectedAuthorsList([...selectedAuthorsList, author]);
     setAuthorsList((current) =>
-      current.filter((item) => item.name !== author.name),
+      current.filter((item) => item.id !== author.id),
     );
   }
 
   function deleteCourseAuthor(author) {
     setAuthorsList([...authorsList, author]);
     setSelectedAuthorsList((current) =>
-      current.filter((item) => item.name !== author.name),
+      current.filter((item) => item.id !== author.id),
     );
   }
 
-  function createNewAuthor(author) {
-    if (author.length < PARAMETERS.AUTHOR_MIN_LENGTH) {
+  function createNewAuthor(authorName) {
+    if (authorName.length < PARAMETERS.AUTHOR_MIN_LENGTH) {
       alert(ALERT_TEXT.AUTHOR_NAME_TOO_SHORT);
       return;
     }
     const newAuthor = {
       id: uuidv4(),
-      name: author,
+      name: authorName,
     };
-    setAuthorsList([...authorsList, newAuthor]);
-    mockedAuthorsList.push(newAuthor);
+    dispatch(addAuthor(newAuthor));
+    setAuthorsList((current) => [...current, newAuthor]);
+    setNewAuthor("");
   }
 
   function isValidCreateCoursePayload() {
@@ -82,21 +100,21 @@ function CreateCourse() {
   }
 
   function cancelCourseCreationHandler() {
-    navigate("/courses");
+    navigate(PATH_URIS.COURSES_LIST);
   }
 
   function createCourseSubmitHandler() {
     if (isValidCreateCoursePayload()) {
       const newCourse = {
         id: uuidv4(),
-        title: title,
-        description: description,
+        title,
+        description,
         creationDate: new Date().toLocaleDateString(),
-        duration: duration,
-        authors: selectedAuthorsList.map((course) => course.id),
+        duration,
+        authors: selectedAuthorsList.map((author) => author.id),
       };
-      mockedCoursesList.push(newCourse);
-      navigate("/");
+      dispatch(addCourse(newCourse));
+      navigate(PATH_URIS.COURSES_LIST);
     }
   }
 
@@ -128,13 +146,14 @@ function CreateCourse() {
           name="createDescription"
           type="text"
           placeholder={PLACEHOLDER_TEXT.ENTER_DESCRIPTION}
+          value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
       </div>
       <div className={styles.createAuthorBlock}>
         <div className={styles.leftBlock}>
           <div className={styles.addAuthor}>
-            <h3>Add author</h3>
+            <h3>{TITLE_TEXT.ADD_AUTHOR}</h3>
             <Input
               name="addAuthorName"
               labelText={LABEL_TEXT.AUTHOR_NAME}
@@ -145,7 +164,7 @@ function CreateCourse() {
             />
             <Button
               buttonText={BUTTON_TEXT.CREATE_AUTHOR}
-              onClick={() => createNewAuthor(newAuthor)}
+              onClick={() => saveAuthors(newAuthor)}
             />
           </div>
           <div className={styles.addDuration}>
@@ -158,35 +177,39 @@ function CreateCourse() {
               placeholderText={PLACEHOLDER_TEXT.ENTER_DURATION}
               onChange={(e) => setDuration(e.target.value)}
             />
-            <h2>Duration: {formatDuration(duration)}</h2>
+            <h2>
+              {TITLE_TEXT.DURATION}: {formatDuration(duration)}
+            </h2>
           </div>
         </div>
         <div className={styles.rightBlock}>
           <div className={styles.authorsList}>
-            <h3>Authors</h3>
+            <h3>{TITLE_TEXT.AUTHORS}</h3>
             {authorsList.length ? (
               authorsList.map((author) => (
-                <Author
-                  key={author.id}
-                  author={author}
-                  buttonText={BUTTON_TEXT.ADD_AUTHOR}
-                  onclickHandler={() => addCourseAuthor(author)}
-                />
+                <div key={author.id} className={styles.authorItem}>
+                  <span>{author.name}</span>
+                  <Button
+                    buttonText={BUTTON_TEXT.ADD_AUTHOR}
+                    onClick={() => addCourseAuthor(author)}
+                  />
+                </div>
               ))
             ) : (
               <p>{ALERT_TEXT.NO_AUTHORS}</p>
             )}
           </div>
           <div className={styles.courseAuthorsList}>
-            <h3>Course authors</h3>
+            <h3>{TITLE_TEXT.COURSE_AUTHORS}</h3>
             {selectedAuthorsList.length ? (
               selectedAuthorsList.map((author) => (
-                <Author
-                  key={author.id}
-                  author={author}
-                  buttonText={BUTTON_TEXT.DELETE_AUTHOR}
-                  onclickHandler={() => deleteCourseAuthor(author)}
-                />
+                <div key={author.id} className={styles.authorItem}>
+                  <span>{author.name}</span>
+                  <Button
+                    buttonText={BUTTON_TEXT.DELETE_AUTHOR}
+                    onClick={() => deleteAuthor(author)}
+                  />
+                </div>
               ))
             ) : (
               <p>{ALERT_TEXT.NO_AUTHORS_SELECTED}</p>

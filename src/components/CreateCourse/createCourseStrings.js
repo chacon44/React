@@ -20,6 +20,13 @@ export const LABEL_TEXT = {
   DURATION: "Duration",
 };
 
+export const TITLE_TEXT = {
+  AUTHORS: "Authors",
+  ADD_AUTHOR: "Add author",
+  COURSE_AUTHORS: "Course authors",
+  DURATION: "Duration",
+};
+
 export const getAlertText = () => ({
   AUTHOR_NAME_TOO_SHORT: `Author name must be at least ${PARAMETERS.AUTHOR_MIN_LENGTH} characters long.`,
   TITLE_REQUIRED: "Title is required.",

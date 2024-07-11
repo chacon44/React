@@ -1,21 +1,24 @@
 import { Link, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-import dateFormater from "../../helpers/dateFormatter";
+import dateFormatter from "../../helpers/dateFormatter";
 import formatDuration from "../../helpers/formatDuration";
 import Button from "../../common/Button/Button";
-import Author from "../CreateCourse/components/Author";
-import { mockedCoursesList, mockedAuthorsList } from "../../constants";
 
 import classes from "./CourseInfo.module.css";
 import { BUTTON_TEXT } from "./courseInfoStrings";
 
+import { PATH_URIS } from "../../constants";
+
 const CourseInfo = () => {
   const { id } = useParams();
-  const selectedCourse = mockedCoursesList.find((course) => course.id === id);
+  const coursesList = useSelector((state) => state.coursesReducer);
+  const selectedCourse = coursesList.find((course) => course.id === id);
+  const authorsList = useSelector((state) => state.authorReducer);
 
   return (
     <div className={classes.courseInfoWrapper}>
-      <Link to="/courses">
+      <Link to={PATH_URIS.COURSES_LIST}>
         <Button buttonText={BUTTON_TEXT.BACK_TO_COURSES} />
       </Link>
       <h2 className={classes.title}>{selectedCourse.title}</h2>
@@ -30,25 +33,21 @@ const CourseInfo = () => {
           </p>
           <p>
             <strong>Duration: </strong>
-            {formatDuration(selectedCourse.duration)} hours
+            {formatDuration(selectedCourse.duration)}
           </p>
           <p>
             <strong>Created: </strong>
-            {dateFormater(selectedCourse.creationDate)}
+            {dateFormatter(selectedCourse.creationDate)}
           </p>
           <p>
             <strong>Authors: </strong>
           </p>
           <ul>
             {selectedCourse.authors.map((authorId) => {
-              const foundAuthor = mockedAuthorsList.find(
+              const foundAuthor = authorsList.find(
                 (author) => author.id === authorId,
               );
-              return (
-                foundAuthor && (
-                  <Author key={foundAuthor.id} author={foundAuthor} />
-                )
-              );
+              return foundAuthor;
             })}
           </ul>
         </div>
