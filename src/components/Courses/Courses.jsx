@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { setCourses } from "../../store/courses/actions";
-import { getCourses } from "../../services";
+import { getCoursesService } from "../../services";
 import SearchBar from "./components/SearchBar/SearchBar";
 import CourseCard from "./components/CourseCard/CourseCard";
 import Button from "../../common/Button/Button";
@@ -19,8 +18,8 @@ function Courses() {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const courses = await getCourses();
-        dispatch(setCourses(courses));
+        const courses = await getCoursesService();
+        dispatch(getCoursesService(courses));
       } catch (error) {
         console.error(LOG_MESSAGES.FETCH_ERROR, error);
       }

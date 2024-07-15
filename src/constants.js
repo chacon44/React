@@ -13,7 +13,7 @@ export const PATH_URIS = {
 export const API_URL = {
   LOGIN: "http://localhost:4000/login",
   REGISTER: "http://localhost:4000/register",
-  ALL_COURSES: "http://localhost:4000//courses/all",
+  ALL_COURSES: "http://localhost:4000/courses/all",
   ALL_AUTHORS: "http://localhost:4000/authors/all",
 };
 

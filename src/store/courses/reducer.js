@@ -1,10 +1,18 @@
-import { SET_COURSES, ADD_COURSE, DELETE_COURSE, UPDATE_COURSE } from "./types";
+import {
+  SAVE_COURSES,
+  GET_COURSES,
+  ADD_COURSE,
+  DELETE_COURSE,
+  UPDATE_COURSE,
+} from "./types";
 
 const initialState = [];
 
 const coursesReducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_COURSES:
+    case GET_COURSES:
+      return action.payload;
+    case SAVE_COURSES:
       return action.payload;
     case ADD_COURSE:
       return [...state, action.payload];

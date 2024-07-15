@@ -5,25 +5,22 @@ import { deleteCourse } from "../../../../store/courses/actions";
 import Button from "../../../../common/Button/Button";
 import formatDuration from "../../../../helpers/formatDuration";
 import dateFormater from "../../../../helpers/dateFormatter";
+import useGetAuthors from "../../../../helpers/authorsGetter";
 import styles from "./CourseCard.module.css";
 import { BUTTON_TEXT, TITLE_TEXT } from "./courseCardStrings";
-import { PATH_URIS } from "../../../../constants";
 
-function CourseCard({
-  id,
-  title,
-  description,
-  creationDate,
-  duration,
-  authors,
-}) {
+function CourseCard(props) {
+  const { id, title, description, creationDate, duration, authors } = props;
+
   const dispatch = useDispatch();
-  // const courseAuthors = getAuthors(authors).join(", ");
+  const courseAuthors = useGetAuthors(authors).join(", ");
 
   const handleDeleteCourse = () => {
     dispatch(deleteCourse(id));
   };
+
   const handleUpdateCourse = () => {};
+
   return (
     <div className={styles.card}>
       <div className={styles.cardLeft}>
@@ -33,7 +30,7 @@ function CourseCard({
       <div className={styles.cardRight}>
         <p className={styles.authors}>
           <strong>{TITLE_TEXT.AUTHORS}</strong>
-          {/* {courseAuthors} */}
+          {courseAuthors}
         </p>
         <p className={styles.duration}>
           <b>{TITLE_TEXT.DURATION}</b>
@@ -44,7 +41,7 @@ function CourseCard({
           {dateFormater(creationDate)}
         </p>
         <div className={styles.buttonBlock}>
-          <Link to={PATH_URIS.COURSE_INFO(id)}>
+          <Link to={`/courses/${id}`}>
             <Button
               className="cardButton"
               buttonText={BUTTON_TEXT.SHOW_COURSE}

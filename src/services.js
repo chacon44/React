@@ -1,12 +1,12 @@
 import axios from "axios";
 import { API_URL } from "./constants";
 
-export const getCourses = async () => {
+export const getCoursesService = async () => {
   const response = await axios.get(API_URL.ALL_COURSES);
   return response.data;
 };
 
-export const getAuthors = async () => {
+export const getAuthorsAPI = async () => {
   const response = await axios.get(API_URL.ALL_AUTHORS);
   return response.data;
 };

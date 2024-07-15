@@ -1,7 +1,9 @@
-import { SAVE_AUTHORS, ADD_AUTHOR, DELETE_AUTHOR } from "./types";
+import { GET_AUTHORS, ADD_AUTHOR, DELETE_AUTHOR } from "./types";
 
-export const saveAuthors = (authors) => ({
-  type: SAVE_AUTHORS,
+//this takes authors, which is an array and returns an action object defined within {} which contains the type and the payload
+//payload is the returning object
+export const getAuthors = (authors) => ({
+  type: GET_AUTHORS,
   payload: authors,
 });
 
