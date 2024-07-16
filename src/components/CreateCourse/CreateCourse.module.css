@@ -1,0 +1,91 @@
+.createCourseWrapper {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  border: 1px solid rgb(107, 107, 180);
+  padding: 10px;
+}
+
+.titleBlock {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.inputTitle label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.inputTitle input {
+  border-color: rgb(0, 255, 8);
+}
+
+.createDescriptionBlock {
+  margin-top: 20px;
+}
+
+.createDescriptionBlock label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.createDescriptionBlock textarea {
+  width: 100%;
+  height: 100px;
+  border-color: rgb(0, 255, 8);
+}
+
+.createAuthorBlock {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  border: 1px solid rgb(128, 9, 0);
+  margin-top: 10px;
+}
+
+.createAuthorBlock h3 {
+  text-align: center;
+  margin: 10px 0;
+}
+
+.leftBlock {
+  width: 45%;
+}
+
+.leftBlock label {
+  display: block;
+  margin-bottom: 5px;
+  text-align: left;
+}
+
+.rightBlock {
+  width: 45%;
+}
+
+.allAuthorsList,
+.chosenAuthorsList {
+  width: 80%;
+}
+
+.leftBlock input {
+  width: 100%;
+}
+
+.addAuthor {
+  text-align: center;
+}
+
+.addAuthor button {
+  margin-top: 10px;
+  margin-bottom: 60px;
+}
+
+.addDuration h2 {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.chosenAuthorsList {
+  text-align: center;
+}

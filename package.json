@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
   "name": "courses-app-2",
-=======
-  "name": "courses-app",
->>>>>>> Task1
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -12,20 +8,15 @@
     "@testing-library/user-event": "^13.5.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-router-dom": "^6.23.1",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-<<<<<<< HEAD
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-=======
     "prettier:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,css}\"",
     "prettier:fix": "prettier --write \"src/**/*.{js,jsx,ts,tsx,css}\"",
     "eslint:fix": "eslint --ext .js,.jsx,.ts,.tsx src --fix",
-    "start": "node index.js",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
@@ -34,7 +25,6 @@
     "prepare": "husky install",
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
     "prepublish": "npm run eslint:fix"
->>>>>>> Task1
   },
   "eslintConfig": {
     "extends": [
@@ -53,8 +43,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-<<<<<<< HEAD
-=======
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
@@ -66,6 +54,5 @@
     "husky": "^9.0.11",
     "prettier": "^3.2.5",
     "prettier-eslint": "^16.3.0"
->>>>>>> Task1
   }
 }

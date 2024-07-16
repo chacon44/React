@@ -1,0 +1,30 @@
+.card {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+  border: 1px solid rgb(128, 49, 0);
+  margin: 10px 0;
+  padding: 20px;
+}
+
+.cardLeft {
+  text-align: left;
+}
+
+.cardRight {
+  text-align: left;
+  width: 100%;
+}
+
+.card button {
+  width: 150px;
+}
+
+.authors {
+  overflow: hidden;
+}
+
+.buttonBlock {
+  display: flex;
+  justify-content: center;
+}

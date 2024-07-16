@@ -1,21 +1,38 @@
 import React from "react";
-import "./Input.css";
+import PropTypes from "prop-types";
 
-const Input = ({ labelText, placeholderText, value, onChange, type = 'input' }) => {
+import "./Input.module.css";
+
+function Input(props) {
+  const {
+    placeholderText = "",
+    onChange,
+    labelText = "",
+    value,
+    name,
+    type,
+  } = props;
+
   return (
-    <div className="custom-input">
-      <label>
-        {labelText}
-        <br />
-        <input
-          placeholder={placeholderText}
-          value={value}
-          onChange={onChange}
-          type={type}
-        />
-      </label>
-    </div>
+    <>
+      {labelText && <label htmlFor={name}>{labelText}</label>}
+      <input
+        id={name}
+        type={type}
+        value={value}
+        placeholder={placeholderText}
+        onChange={onChange}
+      />
+    </>
   );
-};
+}
 
+Input.propTypes = {
+  name: PropTypes.string.isRequired,
+  labelText: PropTypes.string,
+  type: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  placeholder: PropTypes.string,
+  onChange: PropTypes.func.isRequired,
+};
 export default Input;

@@ -1,12 +1,11 @@
-import { MESSAGES } from "../../../helpers/constants";
+import { MESSAGES } from "../../../constants";
 import { v4 as uuidv4 } from "uuid";
-import { PARAMETERS } from "../../../helpers/parameters";
 
 export const AddAuthorToCourse = (
   authorId,
   authors,
   courseAuthors,
-  setCourseAuthors
+  setCourseAuthors,
 ) => {
   const authorToAdd = authors.find((author) => author.id === authorId);
 
@@ -20,23 +19,19 @@ export const AddAuthorToCourse = (
   setCourseAuthors((prevAuthors) => [...prevAuthors, authorToAdd]);
 };
 
-
 export const CreateAuthor = (
   newAuthorName,
   authors,
   addAuthor,
-  setNewAuthorName
+  setNewAuthorName,
 ) => {
-  if (
-    !newAuthorName.trim() ||
-    newAuthorName.trim().length < PARAMETERS.AUTHOR_MIN_LENGTH
-  ) {
-    alert(MESSAGES.AUTHOR_NOT_VALID(PARAMETERS.AUTHOR_MIN_LENGTH));
+  if (!newAuthorName.trim() || newAuthorName.trim().length < 4) {
+    alert(MESSAGES.AUTHOR_NOT_VALID("4"));
     return;
   }
 
   const existingAuthor = authors.find(
-    (author) => author.name.toLowerCase() === newAuthorName.toLowerCase()
+    (author) => author.name.toLowerCase() === newAuthorName.toLowerCase(),
   );
   if (existingAuthor) {
     alert(MESSAGES.DUPLICATED_AUTHOR);
@@ -48,18 +43,17 @@ export const CreateAuthor = (
   setNewAuthorName("");
 };
 
-
 export const CreateNewCourse = (
   title,
   description,
   duration,
   courseAuthors,
   addCourse,
-  onCourseCreated
+  onCourseCreated,
 ) => {
   if (
     !title.trim() ||
-    description.trim().length < PARAMETERS.DESCRIPTION_MIN_LENGTH ||
+    description.trim().length < 4 ||
     isNaN(Number(duration)) ||
     Number(duration) <= 0 ||
     courseAuthors.length === 0
@@ -84,7 +78,7 @@ export const RemoveAuthorFromSelectList = (
   courseAuthors,
   setCourseAuthors,
   authors,
-  setAuthors
+  setAuthors,
 ) => {
   const authorToRemove = courseAuthors.find((author) => author.id === authorId);
 
