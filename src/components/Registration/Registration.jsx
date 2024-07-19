@@ -63,7 +63,6 @@ const Registration = () => {
       });
 
       const result = await response.json();
-      console.log(result);
 
       if (result.successful) {
         navigate(PATH_URIS.LOGIN);
