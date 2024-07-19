@@ -1,10 +1,4 @@
-import {
-  SAVE_COURSES,
-  GET_COURSES,
-  ADD_COURSE,
-  DELETE_COURSE,
-  UPDATE_COURSE,
-} from "./types";
+import { SAVE_COURSES, GET_COURSES, ADD_COURSE, DELETE_COURSE } from "./types";
 
 export const saveCourses = (payload) => ({
   type: SAVE_COURSES,
@@ -24,9 +18,4 @@ export const addCourse = (course) => ({
 export const deleteCourse = (courseId) => ({
   type: DELETE_COURSE,
   payload: courseId,
-});
-
-export const updateCourse = (course) => ({
-  type: UPDATE_COURSE,
-  payload: course,
 });

@@ -6,14 +6,13 @@ import Button from "../../common/Button/Button";
 import Logo from "./components/Logo/Logo";
 import styles from "./Header.module.css";
 import { BUTTON_TEXT, USER_LOGGED } from "./headerStrings";
-import { PATH_URIS, TOKEN } from "../../constants";
+import { PATH_URIS } from "../../constants";
 function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userName = useSelector((state) => state.user.name);
 
   function onLogoutHandler() {
-    localStorage.removeItem(TOKEN);
     dispatch(removeUser());
     navigate(PATH_URIS.LOGIN);
   }

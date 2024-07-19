@@ -8,18 +8,18 @@ import Button from "../../common/Button/Button";
 import styles from "./Courses.module.css";
 import { PATH_URIS } from "../../constants";
 import { BUTTON_TEXT, LOG_MESSAGES } from "./coursesStrings";
+import { selectCourses } from "../../store/selectors";
 
 function Courses() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const courses = useSelector((state) => state.courses);
+  const courses = useSelector(selectCourses) || [];
   const [search, setSearch] = useState("");
 
   useEffect(() => {
     const fetchCourses = async () => {
       try {
         const courses = await getCoursesService();
-        dispatch(getCoursesService(courses));
       } catch (error) {
         console.error(LOG_MESSAGES.FETCH_ERROR, error);
       }
@@ -32,13 +32,11 @@ function Courses() {
     navigate(PATH_URIS.ADD_COURSE);
   };
 
-  const filteredCourseList = Array.isArray(courses)
-    ? courses.filter(
-        (course) =>
-          course.title.toLowerCase().includes(search.toLowerCase()) ||
-          course.id.toLowerCase().includes(search.toLowerCase()),
-      )
-    : [];
+  const filteredCourseList = courses.filter(
+    (course) =>
+      course.title.toLowerCase().includes(search.toLowerCase()) ||
+      course.id.toLowerCase().includes(search.toLowerCase()),
+  );
 
   return (
     <>

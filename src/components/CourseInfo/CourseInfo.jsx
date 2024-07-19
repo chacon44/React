@@ -8,7 +8,7 @@ import { getAuthors } from "../../store/authors/actions";
 import { getAuthorsAPI } from "../../services";
 
 import classes from "./CourseInfo.module.css";
-import { BUTTON_TEXT } from "./courseInfoStrings";
+import { BUTTON_TEXT, INFO_TEXT } from "./courseInfoStrings";
 import { PATH_URIS } from "../../constants";
 
 const CourseInfo = () => {
@@ -21,8 +21,8 @@ const CourseInfo = () => {
 
   const fetchAuthors = () => {
     return async (dispatch) => {
-        const data = await getAuthorsAPI();
-        dispatch(getAuthors(data.result));
+      const data = await getAuthorsAPI();
+      dispatch(getAuthors(data.result));
     };
   };
 
@@ -49,7 +49,7 @@ const CourseInfo = () => {
   };
 
   if (!course) {
-    return <div>Trying to find the course...</div>;
+    return <div>{INFO_TEXT.LOADING}</div>;
   }
 
   return (

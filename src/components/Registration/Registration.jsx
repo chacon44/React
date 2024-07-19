@@ -15,7 +15,6 @@ import {
   LINK_TEXT,
   ERROR_TEXT,
 } from "./registrationStrings";
-
 const Registration = () => {
   const navigate = useNavigate();
 

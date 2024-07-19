@@ -1,3 +1,2 @@
-export const GET_AUTHORS = "SAVE_AUTHORS";
-export const DELETE_AUTHOR = "DELETE_AUTHOR";
+export const GET_AUTHORS = "GET_AUTHORS";
 export const ADD_AUTHOR = "ADD_AUTHOR";

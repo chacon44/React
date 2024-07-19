@@ -5,15 +5,15 @@ import { deleteCourse } from "../../../../store/courses/actions";
 import Button from "../../../../common/Button/Button";
 import formatDuration from "../../../../helpers/formatDuration";
 import dateFormater from "../../../../helpers/dateFormatter";
-import useGetAuthors from "../../../../helpers/authorsGetter";
 import styles from "./CourseCard.module.css";
 import { BUTTON_TEXT, TITLE_TEXT } from "./courseCardStrings";
-
+import getAuthors from "../../../../helpers/authorsGetter";
+import useCombinedAuthors from "../../../../helpers/useCombinedAuthors";
 function CourseCard(props) {
   const { id, title, description, creationDate, duration, authors } = props;
-
+  const combinedAuthorsList = useCombinedAuthors();
+  const authorNames = getAuthors(authors, combinedAuthorsList);
   const dispatch = useDispatch();
-  const courseAuthors = useGetAuthors(authors).join(", ");
 
   const handleDeleteCourse = () => {
     dispatch(deleteCourse(id));
@@ -30,7 +30,9 @@ function CourseCard(props) {
       <div className={styles.cardRight}>
         <p className={styles.authors}>
           <strong>{TITLE_TEXT.AUTHORS}</strong>
-          {courseAuthors}
+          {authorNames.map((name, index) => (
+            <li key={index}>{name}</li>
+          ))}
         </p>
         <p className={styles.duration}>
           <b>{TITLE_TEXT.DURATION}</b>

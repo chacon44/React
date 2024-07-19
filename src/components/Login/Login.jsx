@@ -5,7 +5,7 @@ import { setUser } from "../../store/user/actions";
 import { loginService } from "../../services";
 import Button from "../../common/Button/Button";
 import Input from "../../common/Input/Input";
-import { GLOBAL_PARAMETERS, PATH_URIS, TOKEN } from "../../constants";
+import { GLOBAL_PARAMETERS, PATH_URIS } from "../../constants";
 import classes from "./Login.module.css";
 import {
   BUTTON_TEXT,
@@ -15,6 +15,8 @@ import {
   HEADER_TEXT,
   LINK_TEXT,
 } from "./loginStrings";
+import { INPUT_TYPE } from "../../common/Input/inputStrings";
+import { BUTTON_TYPE } from "../../common/Button/buttonStrings";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -60,7 +62,6 @@ const Login = () => {
       try {
         const result = await loginService(user);
         if (result.successful) {
-          localStorage.setItem(TOKEN, result.token);
           dispatch(
             setUser({
               name: result.user.name,
@@ -86,7 +87,7 @@ const Login = () => {
           <Input
             name="loginUserEmail"
             labelText={LABEL_TEXT.EMAIL}
-            type="email"
+            type={INPUT_TYPE.EMAIL}
             value={userEmail}
             placeholderText={PLACEHOLDER_TEXT.ENTER_EMAIL}
             onChange={(e) => setUserEmail(e.target.value)}
@@ -99,7 +100,7 @@ const Login = () => {
           <Input
             name="loginUserPass"
             labelText={LABEL_TEXT.PASSWORD}
-            type="password"
+            type={INPUT_TYPE.PASSWORD}
             value={userPassword}
             placeholderText={PLACEHOLDER_TEXT.ENTER_PASSWORD}
             onChange={(e) => setUserPassword(e.target.value)}
@@ -109,7 +110,7 @@ const Login = () => {
           )}
         </div>
 
-        <Button type="submit" buttonText={BUTTON_TEXT.LOGIN} />
+        <Button type={BUTTON_TYPE.SUBMIT} buttonText={BUTTON_TEXT.LOGIN} />
         <h4>
           <span>{LINK_TEXT.REGISTRATION_PROMPT}</span>
           <Link to={PATH_URIS.REGISTRATION}>{LINK_TEXT.REGISTRATION}</Link>

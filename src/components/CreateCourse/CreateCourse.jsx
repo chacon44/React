@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { addCourse } from "../../store/courses/actions";
-import { addAuthor } from "../../store/authors/actions";
+import { addAuthor, getAuthors } from "../../store/authors/actions";
 import Button from "../../common/Button/Button";
 import Input from "../../common/Input/Input";
 import formatDuration from "../../helpers/formatDuration";
@@ -17,12 +17,14 @@ import {
   TITLE_TEXT,
 } from "./createCourseStrings";
 import { PATH_URIS } from "../../constants";
+import { getAuthorsAPI } from "../../services";
+import { BUTTON_TYPE } from "../../common/Button/buttonStrings";
+import { CREATED_AUTHORS } from "../../constants";
 
 function CreateCourse() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  const authorsListStore = useSelector((state) => state.authorsList || []);
+  const authorsListStore = useSelector((state) => state.authorsReducer || []);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -33,6 +35,19 @@ function CreateCourse() {
   const [selectedAuthorsList, setSelectedAuthorsList] = useState([]);
 
   const ALERT_TEXT = getAlertText();
+
+  useEffect(() => {
+    async function fetchAndCombineAuthors() {
+      const apiAuthors = await getAuthorsAPI();
+      const localStorageAuthors =
+        JSON.parse(localStorage.getItem(CREATED_AUTHORS)) || [];
+      const combinedAuthors = [...apiAuthors.result, ...localStorageAuthors];
+      dispatch(getAuthors(combinedAuthors));
+      setAvailableAuthorsList(combinedAuthors);
+    }
+
+    fetchAndCombineAuthors();
+  }, [dispatch]);
 
   function createNewAuthor(author) {
     if (author.length < PARAMETERS.AUTHOR_MIN_LENGTH) {
@@ -52,7 +67,6 @@ function CreateCourse() {
     setAvailableAuthorsList(
       availabeAuthorsList.filter((item) => item.id !== author.id),
     );
-
     setSelectedAuthorsList([...selectedAuthorsList, author]);
   }
 
@@ -113,7 +127,7 @@ function CreateCourse() {
           <Input
             name="inputTitle"
             labelText={LABEL_TEXT.TITLE}
-            type="text"
+            type={BUTTON_TYPE}
             value={title}
             placeholderText={PLACEHOLDER_TEXT.ENTER_TITLE}
             onChange={(e) => setTitle(e.target.value)}
@@ -178,7 +192,7 @@ function CreateCourse() {
                 <div className={styles.authorItem} key={author.id}>
                   <span>{author.name}</span>
                   <Button
-                    type="button"
+                    type={BUTTON_TYPE.BUTTON}
                     buttonText={BUTTON_TEXT.ADD_AUTHOR}
                     onClick={() => addCourseAuthor(author)}
                   />
@@ -195,7 +209,7 @@ function CreateCourse() {
                 <div key={author.id} className={styles.authorItem}>
                   <span>{author.name}</span>
                   <Button
-                    type="button"
+                    type={BUTTON_TYPE.BUTTON}
                     buttonText={BUTTON_TEXT.DELETE_AUTHOR}
                     onClick={() => deleteCourseAuthor(author)}
                   />
