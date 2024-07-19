@@ -1,33 +1,25 @@
-import * as actions from "./actionTypes";
+import { SET_USER, REMOVE_USER } from "./types";
 
-const userInitialState = {
+const initialState = {
   isAuth: false,
   name: "",
   email: "",
-  token: localStorage.getItem("token") || "",
+  token: "",
 };
 
-export default function userReducer(state = userInitialState, action) {
+const userReducer = (state = initialState, action) => {
   switch (action.type) {
-    case actions.LOGIN_SUCCESS:
+    case SET_USER:
       return {
         ...state,
         isAuth: true,
-        name: action.payload.name,
-        email: action.payload.email,
-        token: action.payload.token,
+        ...action.payload,
       };
-    case actions.LOGIN_FAILURE:
-      return { ...state, isAuth: false, name: "", email: "", token: "" };
-    case actions.LOGOUT:
-      localStorage.clear(); //##
-      return {
-        isAuth: false,
-        name: "",
-        email: "",
-        token: "",
-      };
+    case REMOVE_USER:
+      return initialState;
     default:
       return state;
   }
-}
+};
+
+export default userReducer;

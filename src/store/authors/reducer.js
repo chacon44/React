@@ -1,8 +1,8 @@
-import { ADD_AUTHOR, GET_AUTHORS } from "./actionTypes";
+import { GET_AUTHORS, ADD_AUTHOR } from "./types";
 
 const authorsInitialState = [];
 
-const authorsReducer = (state = authorsInitialState, action) => {
+const authorReducer = (state = authorsInitialState, action) => {
   switch (action.type) {
     case ADD_AUTHOR:
       return [...state, action.payload];
@@ -13,4 +13,4 @@ const authorsReducer = (state = authorsInitialState, action) => {
   }
 };
 
-export default authorsReducer;
+export default authorReducer;

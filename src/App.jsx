@@ -1,37 +1,59 @@
-import { useEffect, useState } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-
+import React, { useEffect } from "react";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "./store/user/actions";
 import Header from "./components/Header/Header";
 import Login from "./components/Login/Login";
 import Registration from "./components/Registration/Registration";
 import Courses from "./components/Courses/Courses";
 import CreateCourse from "./components/CreateCourse/CreateCourse";
 import CourseInfo from "./components/CourseInfo/CourseInfo";
-
-import "./App.css";
+import { PATH_URIS } from "./constants";
 
 function App() {
-  const [userName, setUserName] = useState("");
-  const isUserLogged = localStorage.getItem("token") != null;
+  const dispatch = useDispatch();
+  const isUserLogged = useSelector((state) => state.user.isAuth);
+  const user = useSelector((state) => state.user);
 
   useEffect(() => {
-    const tokenItem = JSON.parse(localStorage.getItem("token"));
-    if (tokenItem) {
-      setUserName(tokenItem.user.name);
-    }
-  }, []);
+    dispatch(setUser(user));
+  }, [dispatch]);
 
   return (
     <BrowserRouter>
-      <div className="App">
-        <Header userName={userName} setUserName={setUserName} />
+      <div>
+        <Header />
         <Routes>
-          <Route path="/" element={isUserLogged ? <Courses /> : <Login />} />
-          <Route path="/registration" element={<Registration />} />
-          <Route path="/login" element={<Login setUserName={setUserName} />} />
-          <Route path="/courses" element={<Courses />} />
-          <Route path="/courses/add" element={<CreateCourse />} />
-          <Route path="/courses/:id" element={<CourseInfo />} />
+          <Route
+            path="/"
+            element={
+              isUserLogged ? <Courses /> : <Navigate to={PATH_URIS.LOGIN} />
+            }
+          />
+          <Route path={PATH_URIS.REGISTRATION} element={<Registration />} />
+          <Route path={PATH_URIS.LOGIN} element={<Login />} />
+          <Route
+            path={PATH_URIS.COURSES_LIST}
+            element={
+              isUserLogged ? <Courses /> : <Navigate to={PATH_URIS.LOGIN} />
+            }
+          />
+          <Route
+            path={PATH_URIS.ADD_COURSE}
+            element={
+              isUserLogged ? (
+                <CreateCourse />
+              ) : (
+                <Navigate to={PATH_URIS.LOGIN} />
+              )
+            }
+          />
+          <Route
+            path={PATH_URIS.COURSE_INFO}
+            element={
+              isUserLogged ? <CourseInfo /> : <Navigate to={PATH_URIS.LOGIN} />
+            }
+          />
         </Routes>
       </div>
     </BrowserRouter>

@@ -1,10 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
-
 import styles from "./Button.module.css";
-
-// provided default props for type and buttonText to ensure the component behaves correctly even if these props are not provided.
-function Button({ buttonText = "Click me", onClick, type = "button" }) {
+import { BUTTON_TEXT, BUTTON_TYPE } from "./buttonStrings";
+function Button({
+  buttonText = BUTTON_TEXT.DEFAULT_TEXT,
+  onClick,
+  type = BUTTON_TYPE.BUTTON,
+}) {
   return (
     <button type={type} className={styles.button} onClick={onClick}>
       {buttonText}
@@ -14,7 +16,6 @@ function Button({ buttonText = "Click me", onClick, type = "button" }) {
 
 Button.propTypes = {
   type: PropTypes.string,
-  onClick: PropTypes.func.isRequired,
   buttonText: PropTypes.string,
 };
 

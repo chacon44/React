@@ -1,9 +1,8 @@
-import { useState } from "react";
-
+import React, { useState } from "react";
 import Input from "../../../../common/Input/Input";
 import Button from "../../../../common/Button/Button";
-
 import styles from "./SearchBar.module.css";
+import { BUTTON_TEXT, INPUT_NAME, PLACEHOLDER_TEXT } from "./searchBarStrings";
 
 function SearchBar({ searchMessage }) {
   const [search, setSearch] = useState("");
@@ -14,18 +13,20 @@ function SearchBar({ searchMessage }) {
 
   const searchText = (e) => {
     setSearch(e.target.value);
-    !e.target.value && searchMessage("");
+    if (!e.target.value) {
+      searchMessage("");
+    }
   };
 
   return (
     <div className={styles.searchBar}>
       <Input
-        name="searchBar"
+        name={INPUT_NAME.SEARCH_BAR}
         value={search}
         onChange={searchText}
-        placeholderText="Enter course name..."
+        placeholderText={PLACEHOLDER_TEXT.SEARCH_TEXT}
       />
-      <Button onClick={searchClicked} buttonText={"Search"} />
+      <Button onClick={searchClicked} buttonText={BUTTON_TEXT.SEARCH_TEXT} />
     </div>
   );
 }

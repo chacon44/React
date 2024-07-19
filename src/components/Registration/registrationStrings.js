@@ -19,8 +19,13 @@ export const ALERT_TEXT = {
   INVALID_NAME: "Name must be a string an not empty.",
   INVALID_EMAIL: "Email must be filled.",
   INVALID_PASSWORD: "Password must be a string and greater than 6 characters.",
+  REGISTRATION_FAILED:
+    "An error occurred during registration. Please try again.",
 };
 
+export const ERROR_TEXT = {
+  REGISTRATION_ERROR: "Error during registration:",
+};
 export const HEADER_TEXT = {
   REGISTRATION: "Registration",
 };

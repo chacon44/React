@@ -1,31 +1,21 @@
-export async function getCoursesAPI() {
-  const response = await fetch("http://localhost:4000/courses/all");
-  return await response.json();
-}
+import axios from "axios";
+import { API_URL } from "./constants";
 
-export async function getAuthorsAPI() {
-  const response = await fetch("http://localhost:4000/authors/all");
-  return await response.json();
-}
+export const getCoursesService = async () => {
+  const response = await axios.get(API_URL.ALL_COURSES);
+  return response.data;
+};
 
-export async function registerUserAPI(user) {
-  const response = await fetch("http://localhost:4000/register", {
-    method: "POST",
-    body: JSON.stringify(user),
+export const getAuthorsAPI = async () => {
+  const response = await axios.get(API_URL.ALL_AUTHORS);
+  return response.data;
+};
+
+export const loginService = async (user) => {
+  const response = await axios.post(API_URL.LOGIN, user, {
     headers: {
       "Content-Type": "application/json",
     },
   });
-  return await response.json();
-}
-
-export async function loginUserAPI(user) {
-  const response = await fetch("http://localhost:4000/login", {
-    method: "POST",
-    body: JSON.stringify(user),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  return await response.json();
-}
+  return response.data;
+};

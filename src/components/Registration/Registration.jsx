@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import Button from "../../common/Button/Button";
 import Input from "../../common/Input/Input";
 
+import { API_URL, GLOBAL_PARAMETERS, PATH_URIS } from "../../constants";
 import classes from "./Registration.module.css";
 import {
   BUTTON_TEXT,
@@ -12,8 +13,8 @@ import {
   ALERT_TEXT,
   HEADER_TEXT,
   LINK_TEXT,
+  ERROR_TEXT,
 } from "./registrationStrings";
-
 const Registration = () => {
   const navigate = useNavigate();
 
@@ -30,7 +31,10 @@ const Registration = () => {
       alert(ALERT_TEXT.INVALID_EMAIL);
       return false;
     }
-    if (typeof userPassword !== "string" || userPassword.length <= 6) {
+    if (
+      typeof userPassword !== "string" ||
+      userPassword.length <= GLOBAL_PARAMETERS.PASSWORD_LENGTH
+    ) {
       alert(ALERT_TEXT.INVALID_PASSWORD);
       return false;
     }
@@ -50,7 +54,7 @@ const Registration = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:4000/register", {
+      const response = await fetch(API_URL.REGISTER, {
         method: "POST",
         body: JSON.stringify(newUser),
         headers: {
@@ -62,13 +66,13 @@ const Registration = () => {
       console.log(result);
 
       if (result.successful) {
-        navigate("/login");
+        navigate(PATH_URIS.LOGIN);
       } else {
-        alert(result.message || "Registration failed.");
+        alert(result.message || ALERT_TEXT.REGISTRATION_FAILED);
       }
     } catch (error) {
-      console.error("Error during registration:", error);
-      alert("An error occurred during registration. Please try again.");
+      console.error(ERROR_TEXT.REGISTRATION_ERROR, error);
+      alert(ALERT_TEXT.REGISTRATION_FAILED);
     }
   }
 
@@ -113,7 +117,7 @@ const Registration = () => {
         <Button type="submit" buttonText={BUTTON_TEXT.REGISTER} />
         <h4>
           <span>{LINK_TEXT.LOGIN_PROMPT}</span>
-          <Link to="/login">{LINK_TEXT.LOGIN}</Link>
+          <Link to={PATH_URIS.LOGIN}>{LINK_TEXT.LOGIN}</Link>
         </h4>
       </form>
     </div>
