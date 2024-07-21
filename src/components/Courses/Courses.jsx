@@ -8,11 +8,11 @@ import Button from "../../common/Button/Button";
 import styles from "./Courses.module.css";
 import { PATH_URIS } from "../../constants";
 import { BUTTON_TEXT, LOG_MESSAGES } from "./coursesStrings";
-import { selectCourses } from "../../store/selectors";
 
 function Courses() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const selectCourses = (state) => state.courses;
   const courses = useSelector(selectCourses) || [];
   const [search, setSearch] = useState("");
 

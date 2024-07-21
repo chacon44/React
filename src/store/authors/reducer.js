@@ -1,13 +1,35 @@
 import { GET_AUTHORS, ADD_AUTHOR } from "./types";
 
-const authorsInitialState = [];
+const initialState = {
+  apiAuthors: [],
+  localAuthors: [],
+};
 
-const authorReducer = (state = authorsInitialState, action) => {
+const authorReducer = (state = initialState, action) => {
   switch (action.type) {
-    case ADD_AUTHOR:
-      return [...state, action.payload];
     case GET_AUTHORS:
-      return action.payload;
+      console.log(
+        "Reducer handling GET_AUTHORS action with payload:",
+        action.payload,
+      );
+      return {
+        ...state,
+        apiAuthors: action.payload.filter(
+          (author) =>
+            !state.localAuthors.some(
+              (localAuthor) => localAuthor.id === author.id,
+            ),
+        ),
+      };
+    case ADD_AUTHOR:
+      console.log(
+        "Reducer handling ADD_AUTHOR action with payload:",
+        action.payload,
+      );
+      return {
+        ...state,
+        localAuthors: action.payload,
+      };
     default:
       return state;
   }

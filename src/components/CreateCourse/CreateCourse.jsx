@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { addCourse } from "../../store/courses/actions";
@@ -17,36 +17,45 @@ import {
   TITLE_TEXT,
 } from "./createCourseStrings";
 import { PATH_URIS } from "../../constants";
-import { getAuthorsAPI } from "../../services";
 import { BUTTON_TYPE } from "../../common/Button/buttonStrings";
-import { CREATED_AUTHORS } from "../../constants";
 
 function CreateCourse() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const authorsListStore = useSelector(
+    (state) =>
+      state.authors.apiAuthors.concat(state.authors.localAuthors) || [],
+  );
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [duration, setDuration] = useState("");
   const [newAuthor, setNewAuthor] = useState("");
 
-  const [availabeAuthorsList, setAvailableAuthorsList] = useState([]);
-  const [selectedAuthorsList, setSelectedAuthorsList] = useState([]);
+  const [availableAuthorsList, setAvailableAuthorsList] = useState([]);
+  const [assignedAuthorsList, setAssignedAuthorsList] = useState([]);
 
   const ALERT_TEXT = getAlertText();
 
   useEffect(() => {
-    async function fetchAndCombineAuthors() {
-      const apiAuthors = await getAuthorsAPI();
-      const localStorageAuthors =
-        JSON.parse(localStorage.getItem(CREATED_AUTHORS)) || [];
-      const combinedAuthors = [...apiAuthors.result, ...localStorageAuthors];
-      dispatch(getAuthors(combinedAuthors));
-      setAvailableAuthorsList(combinedAuthors);
-    }
-
-    fetchAndCombineAuthors();
+    console.log("Dispatching getAuthors action...");
+    dispatch(getAuthors());
   }, [dispatch]);
+
+  useEffect(() => {
+    console.log(
+      "Updating availableAuthorsList with authorsListStore:",
+      authorsListStore,
+    );
+    const filteredAuthors = authorsListStore.filter(
+      (author) =>
+        !assignedAuthorsList.some((assigned) => assigned.id === author.id),
+    );
+    if (
+      JSON.stringify(filteredAuthors) !== JSON.stringify(availableAuthorsList)
+    ) {
+      setAvailableAuthorsList(filteredAuthors);
+    }
+  }, [authorsListStore, assignedAuthorsList]);
 
   function createNewAuthor(author) {
     if (author.length < PARAMETERS.AUTHOR_MIN_LENGTH) {
@@ -57,21 +66,34 @@ function CreateCourse() {
       id: uuidv4(),
       name: author,
     };
-    setAvailableAuthorsList([...availabeAuthorsList, newAuthor]);
+    setAvailableAuthorsList([...availableAuthorsList, newAuthor]);
+    console.log(
+      "Updating availableAuthorsList with NEW AUTHOR 1:",
+      authorsListStore,
+    );
     dispatch(addAuthor(newAuthor));
+    console.log(
+      "Updating availableAuthorsList with NEW AUTHOR after dispatch:",
+      authorsListStore,
+    );
     setNewAuthor("");
   }
 
   function addCourseAuthor(author) {
+    console.log("Adding author to course:", author);
+    setAssignedAuthorsList([...assignedAuthorsList, author]);
     setAvailableAuthorsList(
-      availabeAuthorsList.filter((item) => item.id !== author.id),
+      availableAuthorsList.filter(
+        (item) =>
+          !assignedAuthorsList.some((assigned) => assigned.id === item.id),
+      ),
     );
-    setSelectedAuthorsList([...selectedAuthorsList, author]);
   }
 
   function deleteCourseAuthor(author) {
+    console.log("Removing author from course:", author);
     setAvailableAuthorsList((current) => [...current, author]);
-    setSelectedAuthorsList((current) =>
+    setAssignedAuthorsList((current) =>
       current.filter((item) => item.id !== author.id),
     );
   }
@@ -93,7 +115,7 @@ function CreateCourse() {
       alert(ALERT_TEXT.DURATION_TOO_SHORT);
       return false;
     }
-    if (!selectedAuthorsList.length) {
+    if (!assignedAuthorsList.length) {
       alert(ALERT_TEXT.AUTHOR_REQUIRED);
       return false;
     }
@@ -112,8 +134,9 @@ function CreateCourse() {
         description,
         creationDate: new Date().toLocaleDateString(),
         duration,
-        authors: selectedAuthorsList.map((course) => course.id),
+        authors: assignedAuthorsList.map((author) => author.id),
       };
+      console.log("Creating new course:", newCourse);
       dispatch(addCourse(newCourse));
       navigate(PATH_URIS.COURSES_LIST);
     }
@@ -186,8 +209,8 @@ function CreateCourse() {
         <div className={styles.rightBlock}>
           <div className={styles.authorsList}>
             <h3>{TITLE_TEXT.AUTHORS}</h3>
-            {availabeAuthorsList.length ? (
-              availabeAuthorsList.map((author) => (
+            {availableAuthorsList.length ? (
+              availableAuthorsList.map((author) => (
                 <div className={styles.authorItem} key={author.id}>
                   <span>{author.name}</span>
                   <Button
@@ -203,8 +226,8 @@ function CreateCourse() {
           </div>
           <div className={styles.courseAuthorsList}>
             <h3>{TITLE_TEXT.COURSE_AUTHORS}</h3>
-            {selectedAuthorsList.length ? (
-              selectedAuthorsList.map((author) => (
+            {assignedAuthorsList.length ? (
+              assignedAuthorsList.map((author) => (
                 <div key={author.id} className={styles.authorItem}>
                   <span>{author.name}</span>
                   <Button

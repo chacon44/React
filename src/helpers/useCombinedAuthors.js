@@ -1,31 +1,22 @@
 import { useSelector } from "react-redux";
-import { useState, useEffect } from "react";
-import { getAuthorsAPI } from "../services";
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { getAuthors } from "../store/authors/actions";
-import { CREATED_AUTHORS } from "../constants";
-const useCombinedAuthors = () => {
-  const authorsListStore = useSelector((state) => state.authorsReducer || []);
-  const [availabeAuthorsList, setAvailableAuthorsList] =
-    useState(authorsListStore);
-  const dispatch = useDispatch();
 
+const useCombinedAuthors = () => {
+  const authorsListStore = useSelector(
+    (state) =>
+      state.authors.apiAuthors.concat(state.authors.localAuthors) || [],
+  );
+  const dispatch = useDispatch();
+  const fetchAuthors = async () => {
+    dispatch(getAuthors());
+  };
   useEffect(() => {
-    getAuthorsAPI().then((data) => {
-      dispatch(getAuthors(data.result));
-      setAvailableAuthorsList(data.result);
-    });
+    fetchAuthors();
   }, [dispatch]);
 
-  const authorsListLocalStorage =
-    JSON.parse(localStorage.getItem(CREATED_AUTHORS)) || [];
-
-  const combinedAuthorsList = [
-    ...availabeAuthorsList,
-    ...authorsListLocalStorage,
-  ];
-
-  return combinedAuthorsList;
+  return authorsListStore;
 };
 
 export default useCombinedAuthors;
