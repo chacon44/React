@@ -2,9 +2,12 @@ import { SET_USER, REMOVE_USER } from "./types";
 
 const initialState = {
   isAuth: false,
-  name: "",
-  email: "",
-  token: "",
+  user: {
+    name: "",
+    email: "",
+    password: "",
+    token: "",
+  },
 };
 
 const userReducer = (state = initialState, action) => {
@@ -13,10 +16,19 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         isAuth: true,
-        ...action.payload,
+        user: action.payload,
       };
     case REMOVE_USER:
-      return initialState;
+      return {
+        ...state,
+        isAuth: false,
+        user: {
+          name: "",
+          email: "",
+          password: "",
+          token: "",
+        },
+      };
     default:
       return state;
   }

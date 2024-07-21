@@ -18,6 +18,7 @@ import {
 } from "./createCourseStrings";
 import { PATH_URIS } from "../../constants";
 import { BUTTON_TYPE } from "../../common/Button/buttonStrings";
+import { INPUT_TYPE } from "../../common/Input/inputStrings";
 
 function CreateCourse() {
   const navigate = useNavigate();
@@ -37,15 +38,10 @@ function CreateCourse() {
   const ALERT_TEXT = getAlertText();
 
   useEffect(() => {
-    console.log("Dispatching getAuthors action...");
     dispatch(getAuthors());
   }, [dispatch]);
 
   useEffect(() => {
-    console.log(
-      "Updating availableAuthorsList with authorsListStore:",
-      authorsListStore,
-    );
     const filteredAuthors = authorsListStore.filter(
       (author) =>
         !assignedAuthorsList.some((assigned) => assigned.id === author.id),
@@ -55,7 +51,7 @@ function CreateCourse() {
     ) {
       setAvailableAuthorsList(filteredAuthors);
     }
-  }, [authorsListStore, assignedAuthorsList]);
+  }, [availableAuthorsList, authorsListStore, assignedAuthorsList]);
 
   function createNewAuthor(author) {
     if (author.length < PARAMETERS.AUTHOR_MIN_LENGTH) {
@@ -67,20 +63,11 @@ function CreateCourse() {
       name: author,
     };
     setAvailableAuthorsList([...availableAuthorsList, newAuthor]);
-    console.log(
-      "Updating availableAuthorsList with NEW AUTHOR 1:",
-      authorsListStore,
-    );
     dispatch(addAuthor(newAuthor));
-    console.log(
-      "Updating availableAuthorsList with NEW AUTHOR after dispatch:",
-      authorsListStore,
-    );
     setNewAuthor("");
   }
 
   function addCourseAuthor(author) {
-    console.log("Adding author to course:", author);
     setAssignedAuthorsList([...assignedAuthorsList, author]);
     setAvailableAuthorsList(
       availableAuthorsList.filter(
@@ -91,7 +78,6 @@ function CreateCourse() {
   }
 
   function deleteCourseAuthor(author) {
-    console.log("Removing author from course:", author);
     setAvailableAuthorsList((current) => [...current, author]);
     setAssignedAuthorsList((current) =>
       current.filter((item) => item.id !== author.id),
@@ -149,19 +135,21 @@ function CreateCourse() {
           <Input
             name="inputTitle"
             labelText={LABEL_TEXT.TITLE}
-            type={BUTTON_TYPE}
+            type={INPUT_TYPE.TEXT}
             value={title}
             placeholderText={PLACEHOLDER_TEXT.ENTER_TITLE}
             onChange={(e) => setTitle(e.target.value)}
           />
         </div>
         <Button
-          onClick={createCourseSubmitHandler}
           buttonText={BUTTON_TEXT.CREATE_COURSE}
+          type={BUTTON_TYPE.BUTTON}
+          onClick={createCourseSubmitHandler}
         />
         <Button
-          onClick={cancelCourseCreationHandler}
           buttonText={BUTTON_TEXT.CANCEL}
+          type={BUTTON_TYPE.BUTTON}
+          onClick={cancelCourseCreationHandler}
         />
       </div>
       <div className={styles.createDescriptionBlock}>
@@ -188,6 +176,7 @@ function CreateCourse() {
             />
             <Button
               buttonText={BUTTON_TEXT.CREATE_AUTHOR}
+              type={BUTTON_TYPE.BUTTON}
               onClick={() => createNewAuthor(newAuthor)}
             />
           </div>
@@ -214,8 +203,8 @@ function CreateCourse() {
                 <div className={styles.authorItem} key={author.id}>
                   <span>{author.name}</span>
                   <Button
-                    type={BUTTON_TYPE.BUTTON}
                     buttonText={BUTTON_TEXT.ADD_AUTHOR}
+                    type={BUTTON_TYPE.BUTTON}
                     onClick={() => addCourseAuthor(author)}
                   />
                 </div>
@@ -231,8 +220,8 @@ function CreateCourse() {
                 <div key={author.id} className={styles.authorItem}>
                   <span>{author.name}</span>
                   <Button
-                    type={BUTTON_TYPE.BUTTON}
                     buttonText={BUTTON_TEXT.DELETE_AUTHOR}
+                    type={BUTTON_TYPE.BUTTON}
                     onClick={() => deleteCourseAuthor(author)}
                   />
                 </div>

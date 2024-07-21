@@ -21,6 +21,8 @@ function CourseCard(props) {
 
   const handleUpdateCourse = () => {};
 
+  const handleShowInfo = () => {};
+
   return (
     <div className={styles.card}>
       <div className={styles.cardLeft}>
@@ -47,6 +49,7 @@ function CourseCard(props) {
             <Button
               className="cardButton"
               buttonText={BUTTON_TEXT.SHOW_COURSE}
+              onClick={handleShowInfo}
             />
           </Link>
           <Button

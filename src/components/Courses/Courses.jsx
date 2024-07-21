@@ -1,32 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { getCoursesService } from "../../services";
+import { useSelector } from "react-redux";
 import SearchBar from "./components/SearchBar/SearchBar";
 import CourseCard from "./components/CourseCard/CourseCard";
 import Button from "../../common/Button/Button";
 import styles from "./Courses.module.css";
 import { PATH_URIS } from "../../constants";
-import { BUTTON_TEXT, LOG_MESSAGES } from "./coursesStrings";
+import { BUTTON_TEXT } from "./coursesStrings";
+import { selectCourses } from "../../store/selectors";
+import { BUTTON_TYPE } from "../../common/Button/buttonStrings";
 
 function Courses() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const selectCourses = (state) => state.courses;
   const courses = useSelector(selectCourses) || [];
   const [search, setSearch] = useState("");
-
-  useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        const courses = await getCoursesService();
-      } catch (error) {
-        console.error(LOG_MESSAGES.FETCH_ERROR, error);
-      }
-    };
-
-    fetchCourses();
-  }, [dispatch]);
 
   const createCourseButtonHandler = () => {
     navigate(PATH_URIS.ADD_COURSE);
@@ -44,6 +31,7 @@ function Courses() {
         <SearchBar searchMessage={setSearch} />
         <Button
           buttonText={BUTTON_TEXT.ADD_COURSE}
+          type={BUTTON_TYPE.SUBMIT}
           onClick={createCourseButtonHandler}
         />
       </div>

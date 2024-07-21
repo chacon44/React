@@ -10,7 +10,7 @@ import { PATH_URIS } from "../../constants";
 function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const userName = useSelector((state) => state.user.name);
+  const userName = useSelector((state) => state.user.user.name);
 
   function onLogoutHandler() {
     dispatch(removeUser());
@@ -23,7 +23,11 @@ function Header() {
       <div className={styles.userBlock}>
         <h2 className={styles.user}>{userName || USER_LOGGED.NO_USER}</h2>
         {userName && (
-          <Button buttonText={BUTTON_TEXT.LOGOUT} onClick={onLogoutHandler} />
+          <Button
+            buttonText={BUTTON_TEXT.LOGOUT}
+            type="button"
+            onClick={onLogoutHandler}
+          />
         )}
       </div>
     </div>

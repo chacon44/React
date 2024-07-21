@@ -3,6 +3,7 @@ import Input from "../../../../common/Input/Input";
 import Button from "../../../../common/Button/Button";
 import styles from "./SearchBar.module.css";
 import { BUTTON_TEXT, INPUT_NAME, PLACEHOLDER_TEXT } from "./searchBarStrings";
+import { BUTTON_TYPE } from "../../../../common/Button/buttonStrings";
 
 function SearchBar({ searchMessage }) {
   const [search, setSearch] = useState("");
@@ -26,7 +27,11 @@ function SearchBar({ searchMessage }) {
         onChange={searchText}
         placeholderText={PLACEHOLDER_TEXT.SEARCH_TEXT}
       />
-      <Button onClick={searchClicked} buttonText={BUTTON_TEXT.SEARCH_TEXT} />
+      <Button
+        buttonText={BUTTON_TEXT.SEARCH_TEXT}
+        type={BUTTON_TYPE.BUTTON}
+        onClick={searchClicked}
+      />
     </div>
   );
 }

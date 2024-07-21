@@ -8,10 +8,6 @@ const initialState = {
 const authorReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_AUTHORS:
-      console.log(
-        "Reducer handling GET_AUTHORS action with payload:",
-        action.payload,
-      );
       return {
         ...state,
         apiAuthors: action.payload.filter(
@@ -22,10 +18,6 @@ const authorReducer = (state = initialState, action) => {
         ),
       };
     case ADD_AUTHOR:
-      console.log(
-        "Reducer handling ADD_AUTHOR action with payload:",
-        action.payload,
-      );
       return {
         ...state,
         localAuthors: action.payload,

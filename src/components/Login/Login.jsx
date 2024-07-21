@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../store/user/actions";
 import { loginService } from "../../services";
 import Button from "../../common/Button/Button";
@@ -21,7 +21,6 @@ import { BUTTON_TYPE } from "../../common/Button/buttonStrings";
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [errors, setErrors] = useState({});
@@ -66,6 +65,7 @@ const Login = () => {
             setUser({
               name: result.user.name,
               email: result.user.email,
+              password: userPassword,
               token: result.token,
             }),
           );
@@ -110,7 +110,11 @@ const Login = () => {
           )}
         </div>
 
-        <Button type={BUTTON_TYPE.SUBMIT} buttonText={BUTTON_TEXT.LOGIN} />
+        <Button
+          type={BUTTON_TYPE.SUBMIT}
+          buttonText={BUTTON_TEXT.LOGIN}
+          onClick={loginOnSubmitHandler}
+        />
         <h4>
           <span>{LINK_TEXT.REGISTRATION_PROMPT}</span>
           <Link to={PATH_URIS.REGISTRATION}>{LINK_TEXT.REGISTRATION}</Link>

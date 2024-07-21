@@ -55,7 +55,11 @@ const CourseInfo = () => {
   return (
     <div className={classes.courseInfoWrapper}>
       <Link to={PATH_URIS.COURSES_LIST}>
-        <Button buttonText={BUTTON_TEXT.BACK_TO_COURSES} onClick={handleBack} />
+        <Button
+          buttonText={BUTTON_TEXT.BACK_TO_COURSES}
+          type="button"
+          onClick={handleBack}
+        />
       </Link>
       <h2 className={classes.title}>{course.title}</h2>
       <div className={classes.courseInfo}>
