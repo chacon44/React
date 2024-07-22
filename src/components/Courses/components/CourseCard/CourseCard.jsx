@@ -1,15 +1,28 @@
+import React from "react";
 import { Link } from "react-router-dom";
-
+import { useDispatch } from "react-redux";
+import { deleteCourse } from "../../../../store/courses/actions";
 import Button from "../../../../common/Button/Button";
 import formatDuration from "../../../../helpers/formatDuration";
-import getAuthors from "../../../../helpers/authorsGetter";
 import dateFormater from "../../../../helpers/dateFormatter";
-
 import styles from "./CourseCard.module.css";
-
+import { BUTTON_TEXT, TITLE_TEXT } from "./courseCardStrings";
+import getAuthors from "../../../../helpers/authorsGetter";
+import useCombinedAuthors from "../../../../helpers/useCombinedAuthors";
+import { BUTTON_TYPE } from "../../../../common/Button/buttonStrings";
 function CourseCard(props) {
   const { id, title, description, creationDate, duration, authors } = props;
-  const courseAuthors = getAuthors(authors).join(", ");
+  const combinedAuthorsList = useCombinedAuthors();
+  const authorNames = getAuthors(authors, combinedAuthorsList);
+  const dispatch = useDispatch();
+
+  const handleDeleteCourse = () => {
+    dispatch(deleteCourse(id));
+  };
+
+  const handleUpdateCourse = () => {};
+
+  const handleShowInfo = () => {};
 
   return (
     <div className={styles.card}>
@@ -19,21 +32,40 @@ function CourseCard(props) {
       </div>
       <div className={styles.cardRight}>
         <p className={styles.authors}>
-          <strong>Authors: </strong>
-          {courseAuthors}
+          <strong>{TITLE_TEXT.AUTHORS}</strong>
+          {authorNames.map((name, index) => (
+            <li key={index}>{name}</li>
+          ))}
         </p>
         <p className={styles.duration}>
-          <b>Duration: </b>
+          <b>{TITLE_TEXT.DURATION}</b>
           {formatDuration(duration)}
         </p>
         <p className={styles.created}>
-          <strong>Created: </strong>
+          <strong>{TITLE_TEXT.CREATED}</strong>
           {dateFormater(creationDate)}
         </p>
         <div className={styles.buttonBlock}>
           <Link to={`/courses/${id}`}>
-            <Button className="cardButton" buttonText="Show course"></Button>
+            <Button
+              className="cardButton"
+              buttonText={BUTTON_TEXT.SHOW_COURSE}
+              type={BUTTON_TYPE.BUTTON}
+              onClick={handleShowInfo}
+            />
           </Link>
+          <Button
+            className="cardButton"
+            buttonText={BUTTON_TEXT.UPDATE_COURSE}
+            type={BUTTON_TYPE.BUTTON}
+            onClick={handleUpdateCourse}
+          />
+          <Button
+            className="cardButton"
+            buttonText={BUTTON_TEXT.DELETE_COURSE}
+            type={BUTTON_TYPE.BUTTON}
+            onClick={handleDeleteCourse}
+          />
         </div>
       </div>
     </div>

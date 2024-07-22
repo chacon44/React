@@ -1,9 +1,11 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../../store/user/actions";
+import { loginService } from "../../services";
 import Button from "../../common/Button/Button";
 import Input from "../../common/Input/Input";
-
+import { GLOBAL_PARAMETERS, PATH_URIS } from "../../constants";
 import classes from "./Login.module.css";
 import {
   BUTTON_TEXT,
@@ -13,10 +15,12 @@ import {
   HEADER_TEXT,
   LINK_TEXT,
 } from "./loginStrings";
+import { INPUT_TYPE } from "../../common/Input/inputStrings";
+import { BUTTON_TYPE } from "../../common/Button/buttonStrings";
 
-const Login = ({ setUserName }) => {
+const Login = () => {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [errors, setErrors] = useState({});
@@ -27,16 +31,18 @@ const Login = ({ setUserName }) => {
   }
 
   function validatePassword(password) {
-    return password.length >= 6;
+    return password.length >= GLOBAL_PARAMETERS.PASSWORD_LENGTH;
   }
 
   function isValidUserData() {
     const newErrors = {};
     if (!validateEmail(userEmail)) {
-      newErrors.userEmail = "Invalid email format.";
+      newErrors.userEmail = ALERT_TEXT.INVALID_EMAIL;
     }
     if (!validatePassword(userPassword)) {
-      newErrors.userPassword = "Password must be at least 6 characters long.";
+      newErrors.userPassword = ALERT_TEXT.INVALID_PASSWORD(
+        GLOBAL_PARAMETERS.PASSWORD_LENGTH,
+      );
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -52,20 +58,23 @@ const Login = ({ setUserName }) => {
         password: userPassword,
       };
 
-      const response = await fetch("http://localhost:4000/login", {
-        method: "POST",
-        body: JSON.stringify(user),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const result = await response.json();
-      if (result.successful) {
-        localStorage.setItem("token", JSON.stringify(result));
-        setUserName(result.user.name);
-        navigate("/courses");
-      } else {
-        alert(result.message || "Login failed");
+      try {
+        const result = await loginService(user);
+        if (result.successful) {
+          dispatch(
+            setUser({
+              name: result.user.name,
+              email: result.user.email,
+              password: userPassword,
+              token: result.token,
+            }),
+          );
+          navigate(PATH_URIS.COURSES_LIST);
+        } else {
+          alert(result.message || ALERT_TEXT.LOGIN_FAILED);
+        }
+      } catch (error) {
+        alert(ALERT_TEXT.LOGIN_ERROR);
       }
     }
   }
@@ -78,7 +87,7 @@ const Login = ({ setUserName }) => {
           <Input
             name="loginUserEmail"
             labelText={LABEL_TEXT.EMAIL}
-            type="email"
+            type={INPUT_TYPE.EMAIL}
             value={userEmail}
             placeholderText={PLACEHOLDER_TEXT.ENTER_EMAIL}
             onChange={(e) => setUserEmail(e.target.value)}
@@ -91,7 +100,7 @@ const Login = ({ setUserName }) => {
           <Input
             name="loginUserPass"
             labelText={LABEL_TEXT.PASSWORD}
-            type="password"
+            type={INPUT_TYPE.PASSWORD}
             value={userPassword}
             placeholderText={PLACEHOLDER_TEXT.ENTER_PASSWORD}
             onChange={(e) => setUserPassword(e.target.value)}
@@ -101,10 +110,14 @@ const Login = ({ setUserName }) => {
           )}
         </div>
 
-        <Button type="submit" buttonText={BUTTON_TEXT.LOGIN} />
+        <Button
+          type={BUTTON_TYPE.SUBMIT}
+          buttonText={BUTTON_TEXT.LOGIN}
+          onClick={loginOnSubmitHandler}
+        />
         <h4>
           <span>{LINK_TEXT.REGISTRATION_PROMPT}</span>
-          <Link to="/registration">{LINK_TEXT.REGISTRATION}</Link>
+          <Link to={PATH_URIS.REGISTRATION}>{LINK_TEXT.REGISTRATION}</Link>
         </h4>
       </form>
     </div>

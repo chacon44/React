@@ -1,55 +1,91 @@
-import { Link, useParams } from "react-router-dom";
-
-import dateFormater from "../../helpers/dateFormatter";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect } from "react";
+import dateFormatter from "../../helpers/dateFormatter";
 import formatDuration from "../../helpers/formatDuration";
 import Button from "../../common/Button/Button";
-import Author from "../CreateCourse/components/Author";
-import { mockedCoursesList, mockedAuthorsList } from "../../constants";
+import { getAuthors } from "../../store/authors/actions";
+import { getAuthorsAPI } from "../../services";
 
 import classes from "./CourseInfo.module.css";
-import { BUTTON_TEXT } from "./courseInfoStrings";
+import { BUTTON_TEXT, INFO_TEXT } from "./courseInfoStrings";
+import { PATH_URIS } from "../../constants";
 
 const CourseInfo = () => {
-  const { id } = useParams();
-  const selectedCourse = mockedCoursesList.find((course) => course.id === id);
+  const { courseId } = useParams();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const getCourse = (state, courseId) =>
+    state.courses.find((course) => course.id === courseId);
+
+  const fetchAuthors = () => {
+    return async (dispatch) => {
+      const data = await getAuthorsAPI();
+      dispatch(getAuthors(data.result));
+    };
+  };
+
+  const getCourseAuthors = (state, course) => {
+    if (!course) return [];
+    return course.authors.map((authorId) => {
+      const author = state.authors.find((author) => author.id === authorId);
+      return author.name;
+    });
+  };
+
+  const course = useSelector((state) => getCourse(state, courseId));
+  const authors = useSelector((state) => state.authors);
+  const courseAuthors = getCourseAuthors({ authors }, course);
+
+  useEffect(() => {
+    if (authors.length === 0) {
+      dispatch(fetchAuthors());
+    }
+  }, [courseId, course, authors.length, dispatch]);
+
+  const handleBack = () => {
+    navigate(PATH_URIS.COURSES_LIST);
+  };
+
+  if (!course) {
+    return <div>{INFO_TEXT.LOADING}</div>;
+  }
 
   return (
     <div className={classes.courseInfoWrapper}>
-      <Link to="/courses">
-        <Button buttonText={BUTTON_TEXT.BACK_TO_COURSES} />
+      <Link to={PATH_URIS.COURSES_LIST}>
+        <Button
+          buttonText={BUTTON_TEXT.BACK_TO_COURSES}
+          type="button"
+          onClick={handleBack}
+        />
       </Link>
-      <h2 className={classes.title}>{selectedCourse.title}</h2>
+      <h2 className={classes.title}>{course.title}</h2>
       <div className={classes.courseInfo}>
         <div className={classes.leftBlock}>
-          <p>{selectedCourse.description}</p>
+          <p>{course.description}</p>
         </div>
         <div className={classes.rightBlock}>
           <p>
             <strong>ID: </strong>
-            {selectedCourse.id}
+            {course.id}
           </p>
           <p>
             <strong>Duration: </strong>
-            {formatDuration(selectedCourse.duration)} hours
+            {formatDuration(course.duration)}
           </p>
           <p>
             <strong>Created: </strong>
-            {dateFormater(selectedCourse.creationDate)}
+            {dateFormatter(course.creationDate)}
           </p>
           <p>
             <strong>Authors: </strong>
           </p>
           <ul>
-            {selectedCourse.authors.map((authorId) => {
-              const foundAuthor = mockedAuthorsList.find(
-                (author) => author.id === authorId,
-              );
-              return (
-                foundAuthor && (
-                  <Author key={foundAuthor.id} author={foundAuthor} />
-                )
-              );
-            })}
+            {courseAuthors.map((authorName, index) => (
+              <li key={index}>{authorName}</li>
+            ))}
           </ul>
         </div>
       </div>

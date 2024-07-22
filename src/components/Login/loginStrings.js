@@ -14,6 +14,11 @@ export const LABEL_TEXT = {
 
 export const ALERT_TEXT = {
   FILL_ALL_FIELDS: "All fields have to be filled",
+  INVALID_PASSWORD: (minLength) =>
+    `Password must be at least ${minLength} characters long.`,
+  INVALID_EMAIL: "Invalid email format.",
+  LOGIN_FAILED: "Login failed",
+  LOGIN_ERROR: "An error occurred during login. Please try again.",
 };
 
 export const HEADER_TEXT = {

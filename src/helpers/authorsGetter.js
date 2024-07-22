@@ -1,15 +1,14 @@
-import { mockedAuthorsList } from "../constants";
-
-export default function getAuthors(authorsIdArray) {
+const getAuthors = (authorsIdArray, combinedAuthorsList) => {
   const authorsArray = [];
 
-  authorsIdArray.forEach((authorId) =>
-    mockedAuthorsList.forEach((author) => {
-      if (author.id === authorId) {
-        authorsArray.push(author.name);
-      }
-    }),
-  );
+  authorsIdArray.forEach((authorId) => {
+    const author = combinedAuthorsList.find((author) => author.id === authorId);
+    if (author) {
+      authorsArray.push(author.name);
+    }
+  });
 
   return authorsArray;
-}
+};
+
+export default getAuthors;
