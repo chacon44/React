@@ -46,11 +46,8 @@ function CreateCourse() {
       (author) =>
         !assignedAuthorsList.some((assigned) => assigned.id === author.id),
     );
-    if (
-      JSON.stringify(filteredAuthors) !== JSON.stringify(availableAuthorsList)
-    ) {
-      setAvailableAuthorsList(filteredAuthors);
-    }
+
+    setAvailableAuthorsList(filteredAuthors);
   }, [availableAuthorsList, authorsListStore, assignedAuthorsList]);
 
   function createNewAuthor(author) {
@@ -122,7 +119,6 @@ function CreateCourse() {
         duration,
         authors: assignedAuthorsList.map((author) => author.id),
       };
-      console.log("Creating new course:", newCourse);
       dispatch(addCourse(newCourse));
       navigate(PATH_URIS.COURSES_LIST);
     }
@@ -156,7 +152,7 @@ function CreateCourse() {
         <label htmlFor="createDescription">{LABEL_TEXT.DESCRIPTION}</label>
         <textarea
           name="createDescription"
-          type="text"
+          type={INPUT_TYPE.TEXT}
           placeholder={PLACEHOLDER_TEXT.ENTER_DESCRIPTION}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
@@ -169,7 +165,7 @@ function CreateCourse() {
             <Input
               name="addAuthorName"
               labelText={LABEL_TEXT.AUTHOR_NAME}
-              type="text"
+              type={INPUT_TYPE.TEXT}
               value={newAuthor}
               placeholderText={PLACEHOLDER_TEXT.ENTER_AUTHOR_NAME}
               onChange={(e) => setNewAuthor(e.target.value)}
@@ -185,7 +181,7 @@ function CreateCourse() {
             <Input
               name="addDuration"
               labelText={LABEL_TEXT.DURATION}
-              type="number"
+              type={INPUT_TYPE.NUMBER}
               value={duration}
               placeholderText={PLACEHOLDER_TEXT.ENTER_DURATION}
               onChange={(e) => setDuration(e.target.value)}

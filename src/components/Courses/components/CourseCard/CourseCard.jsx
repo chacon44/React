@@ -9,6 +9,7 @@ import styles from "./CourseCard.module.css";
 import { BUTTON_TEXT, TITLE_TEXT } from "./courseCardStrings";
 import getAuthors from "../../../../helpers/authorsGetter";
 import useCombinedAuthors from "../../../../helpers/useCombinedAuthors";
+import { BUTTON_TYPE } from "../../../../common/Button/buttonStrings";
 function CourseCard(props) {
   const { id, title, description, creationDate, duration, authors } = props;
   const combinedAuthorsList = useCombinedAuthors();
@@ -49,17 +50,20 @@ function CourseCard(props) {
             <Button
               className="cardButton"
               buttonText={BUTTON_TEXT.SHOW_COURSE}
+              type={BUTTON_TYPE.BUTTON}
               onClick={handleShowInfo}
             />
           </Link>
           <Button
             className="cardButton"
             buttonText={BUTTON_TEXT.UPDATE_COURSE}
+            type={BUTTON_TYPE.BUTTON}
             onClick={handleUpdateCourse}
           />
           <Button
             className="cardButton"
             buttonText={BUTTON_TEXT.DELETE_COURSE}
+            type={BUTTON_TYPE.BUTTON}
             onClick={handleDeleteCourse}
           />
         </div>

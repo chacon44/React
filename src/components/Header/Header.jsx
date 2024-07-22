@@ -7,6 +7,7 @@ import Logo from "./components/Logo/Logo";
 import styles from "./Header.module.css";
 import { BUTTON_TEXT, USER_LOGGED } from "./headerStrings";
 import { PATH_URIS } from "../../constants";
+import { BUTTON_TYPE } from "../../common/Button/buttonStrings";
 function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -25,7 +26,7 @@ function Header() {
         {userName && (
           <Button
             buttonText={BUTTON_TEXT.LOGOUT}
-            type="button"
+            type={BUTTON_TYPE.BUTTON}
             onClick={onLogoutHandler}
           />
         )}
