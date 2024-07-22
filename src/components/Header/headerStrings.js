@@ -2,6 +2,7 @@ export const BUTTON_TEXT = {
   LOGOUT: "Logout",
 };
 
-export const USER_LOGGED = {
-  NO_USER: "No user logged",
+export const HEADER_TEXT = {
+  NOT_LOGGED: "No user logged",
+  NO_NAME: "No name",
 };

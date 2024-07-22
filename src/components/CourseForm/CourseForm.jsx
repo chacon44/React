@@ -7,7 +7,7 @@ import { addAuthor, getAuthors } from "../../store/authors/actions";
 import Button from "../../common/Button/Button";
 import Input from "../../common/Input/Input";
 import formatDuration from "../../helpers/formatDuration";
-import styles from "./CreateCourse.module.css";
+import styles from "./CourseForm.module.css";
 import {
   BUTTON_TEXT,
   PLACEHOLDER_TEXT,
@@ -15,7 +15,7 @@ import {
   getAlertText,
   PARAMETERS,
   TITLE_TEXT,
-} from "./createCourseStrings";
+} from "./courseFormStrings";
 import { PATH_URIS } from "../../constants";
 import { BUTTON_TYPE } from "../../common/Button/buttonStrings";
 import { INPUT_TYPE } from "../../common/Input/inputStrings";

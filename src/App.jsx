@@ -6,7 +6,7 @@ import Header from "./components/Header/Header";
 import Login from "./components/Login/Login";
 import Registration from "./components/Registration/Registration";
 import Courses from "./components/Courses/Courses";
-import CreateCourse from "./components/CreateCourse/CreateCourse";
+import CreateCourse from "./components/CourseForm/CourseForm";
 import CourseInfo from "./components/CourseInfo/CourseInfo";
 import { PATH_URIS } from "./constants";
 

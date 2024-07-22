@@ -10,6 +10,7 @@ import { getAuthorsAPI } from "../../services";
 import classes from "./CourseInfo.module.css";
 import { BUTTON_TEXT, INFO_TEXT } from "./courseInfoStrings";
 import { PATH_URIS } from "../../constants";
+import { BUTTON_TYPE } from "../../common/Button/buttonStrings";
 
 const CourseInfo = () => {
   const { courseId } = useParams();
@@ -57,7 +58,7 @@ const CourseInfo = () => {
       <Link to={PATH_URIS.COURSES_LIST}>
         <Button
           buttonText={BUTTON_TEXT.BACK_TO_COURSES}
-          type="button"
+          type={BUTTON_TYPE.BUTTON}
           onClick={handleBack}
         />
       </Link>
