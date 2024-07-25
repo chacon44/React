@@ -21,6 +21,7 @@ export const ALERT_TEXT = {
   INVALID_PASSWORD: "Password must be a string and greater than 6 characters.",
   REGISTRATION_FAILED:
     "An error occurred during registration. Please try again.",
+  EMAIL_ALREADY_EXISTS: "The email is already registered",
 };
 
 export const ERROR_TEXT = {
