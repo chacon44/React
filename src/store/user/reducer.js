@@ -8,7 +8,6 @@ const userInitialState = {
     name: "",
     email: "",
     password: "",
-    role: "",
     token: "",
   },
 };
@@ -23,7 +22,16 @@ const userReducer = (state = userInitialState, action) => {
           action.payload.email === ADMIN_CREDENTIALS.EMAIL
             ? ROLES.ADMIN
             : ROLES.USER,
-        user: action.payload,
+        user: {
+          ...state.user,
+          name:
+            action.payload.role === ROLES.ADMIN
+              ? ROLES.ADMIN
+              : action.payload.name,
+          email: action.payload.email,
+          password: action.payload.password,
+          token: action.payload.token,
+        },
       };
     case LOGOUT_USER:
       return {
@@ -34,7 +42,6 @@ const userReducer = (state = userInitialState, action) => {
           name: "",
           email: "",
           password: "",
-          role: "",
           token: "",
         },
       };
@@ -42,9 +49,6 @@ const userReducer = (state = userInitialState, action) => {
       return {
         ...state,
         isAuth: true,
-        name:
-          action.payload.role === ROLES.ADMIN ? "Admin" : action.payload.name,
-        email: action.payload.email,
         role: action.payload.role,
       };
     default:

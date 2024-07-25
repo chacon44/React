@@ -12,7 +12,8 @@ export const PATH_URIS = {
   LOGIN: "/login",
   COURSES_LIST: "/courses",
   ADD_COURSE: "/courses/add",
-  COURSE_INFO: "/courses/:id",
+  UPDATE_COURSE: "/courses/update/:courseId",
+  COURSE_INFO: "/courses/:courseId",
 };
 
 export const API_URL = {

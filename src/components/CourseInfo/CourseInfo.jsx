@@ -1,31 +1,22 @@
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
+import React from "react";
 import dateFormatter from "../../helpers/dateFormatter";
 import formatDuration from "../../helpers/formatDuration";
 import Button from "../../common/Button/Button";
-import { getAuthors } from "../../store/authors/actions";
-import { getAuthorsAPI } from "../../services";
 
 import classes from "./CourseInfo.module.css";
 import { BUTTON_TEXT, INFO_TEXT } from "./courseInfoStrings";
 import { PATH_URIS } from "../../constants";
 import { BUTTON_TYPE } from "../../common/Button/buttonStrings";
+import { getAuthors } from "../../store/selectors";
 
 const CourseInfo = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const getCourse = (state, courseId) =>
     state.courses.find((course) => course.id === courseId);
-
-  const fetchAuthors = () => {
-    return async (dispatch) => {
-      const data = await getAuthorsAPI();
-      dispatch(getAuthors(data.result));
-    };
-  };
 
   const getCourseAuthors = (state, course) => {
     if (!course) return [];
@@ -36,14 +27,8 @@ const CourseInfo = () => {
   };
 
   const course = useSelector((state) => getCourse(state, courseId));
-  const authors = useSelector((state) => state.authors);
+  const authors = useSelector(getAuthors);
   const courseAuthors = getCourseAuthors({ authors }, course);
-
-  useEffect(() => {
-    if (authors.length === 0) {
-      dispatch(fetchAuthors());
-    }
-  }, [courseId, course, authors.length, dispatch]);
 
   const handleBack = () => {
     navigate(PATH_URIS.COURSES_LIST);

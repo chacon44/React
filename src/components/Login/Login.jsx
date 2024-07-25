@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setUser } from "../../store/user/actions";
-import { loginService } from "../../services";
 import Button from "../../common/Button/Button";
 import Input from "../../common/Input/Input";
 import { GLOBAL_PARAMETERS, PATH_URIS, ROLES } from "../../constants";
@@ -17,7 +15,7 @@ import {
 } from "./loginStrings";
 import { INPUT_TYPE } from "../../common/Input/inputStrings";
 import { BUTTON_TYPE } from "../../common/Button/buttonStrings";
-import { ADMIN_CREDENTIALS } from "../../constants";
+import { loginUserThunk } from "../../store/user/thunk";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -26,8 +24,6 @@ const Login = () => {
   const [userPassword, setUserPassword] = useState("");
   const [errors, setErrors] = useState({});
 
-  const adminEmail = ADMIN_CREDENTIALS.EMAIL;
-  const adminPassword = ADMIN_CREDENTIALS.PASSWORD;
   function validateEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -62,38 +58,9 @@ const Login = () => {
         role: ROLES.USER,
       };
 
-      try {
-        const result = await loginService(user);
-        if (result.successful) {
-          if (user.email === adminEmail && user.password === adminPassword) {
-            user.role = ROLES.ADMIN;
-          }
-          console.log("isAuth: ", user.isAuth);
-          console.log("name: ", user.name);
-          console.log("email: ", user.email);
-          console.log("password: ", user.password);
-          console.log("role: ", user.role);
-          console.log("role: ", result.user.role);
-
-          dispatch(
-            setUser({
-              isAuth: true,
-              name: result.user.name,
-              email: result.user.email,
-              password: result.user.password,
-              role: result.user.role,
-              token: result.token,
-            }),
-          );
-          console.log("isAuth: ", user.isAuth);
-
-          navigate(PATH_URIS.COURSES_LIST);
-        } else {
-          alert(result.message || ALERT_TEXT.LOGIN_FAILED);
-        }
-      } catch (error) {
-        alert(ALERT_TEXT.LOGIN_ERROR);
-      }
+      dispatch(loginUserThunk(user)).then(() => {
+        navigate(PATH_URIS.COURSES_LIST);
+      });
     }
   }
 

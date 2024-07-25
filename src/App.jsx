@@ -1,23 +1,29 @@
 import React, { useEffect } from "react";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "./store/user/actions";
 import Header from "./components/Header/Header";
 import Login from "./components/Login/Login";
 import Registration from "./components/Registration/Registration";
 import Courses from "./components/Courses/Courses";
-import CreateCourse from "./components/CourseForm/CourseForm";
+import CourseForm from "./components/CourseForm/CourseForm";
+import EmptyCourseList from "./components/EmptyCourseList/EmptyCourseList";
 import CourseInfo from "./components/CourseInfo/CourseInfo";
+import PrivateRoute from "./components/PrivateRoute/privateRoute";
+import { getCourses, getUserIsAuth } from "./store/selectors";
 import { PATH_URIS } from "./constants";
-
+import { fetchCourses } from "./store/courses/thunk";
 function App() {
   const dispatch = useDispatch();
-  const isUserLogged = useSelector((state) => state.user.isAuth);
-  const user = useSelector((state) => state.user);
+  const isUserLogged = useSelector(getUserIsAuth);
+  const courses = useSelector(getCourses);
 
   useEffect(() => {
-    dispatch(setUser(user));
+    dispatch(fetchCourses());
   }, [dispatch]);
+
+  const renderCoursesOrEmpty = () => {
+    return courses.length < 1 ? <EmptyCourseList /> : <Courses />;
+  };
 
   return (
     <BrowserRouter>
@@ -27,7 +33,11 @@ function App() {
           <Route
             path="/"
             element={
-              isUserLogged ? <Courses /> : <Navigate to={PATH_URIS.LOGIN} />
+              isUserLogged ? (
+                renderCoursesOrEmpty()
+              ) : (
+                <Navigate to={PATH_URIS.LOGIN} />
+              )
             }
           />
           <Route path={PATH_URIS.REGISTRATION} element={<Registration />} />
@@ -35,14 +45,32 @@ function App() {
           <Route
             path={PATH_URIS.COURSES_LIST}
             element={
-              isUserLogged ? <Courses /> : <Navigate to={PATH_URIS.LOGIN} />
+              isUserLogged ? (
+                renderCoursesOrEmpty()
+              ) : (
+                <Navigate to={PATH_URIS.LOGIN} />
+              )
             }
           />
           <Route
             path={PATH_URIS.ADD_COURSE}
             element={
               isUserLogged ? (
-                <CreateCourse />
+                <PrivateRoute>
+                  <CourseForm />
+                </PrivateRoute>
+              ) : (
+                <Navigate to={PATH_URIS.LOGIN} />
+              )
+            }
+          />
+          <Route
+            path={PATH_URIS.UPDATE_COURSE}
+            element={
+              isUserLogged ? (
+                <PrivateRoute>
+                  <CourseForm />
+                </PrivateRoute>
               ) : (
                 <Navigate to={PATH_URIS.LOGIN} />
               )
