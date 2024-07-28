@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-
+import { useDispatch } from "react-redux";
 import Button from "../../common/Button/Button";
 import Input from "../../common/Input/Input";
 
-import { API_URL, GLOBAL_PARAMETERS, PATH_URIS } from "../../constants";
+import { GLOBAL_PARAMETERS, PATH_URIS } from "../../constants";
 import classes from "./Registration.module.css";
 import {
   BUTTON_TEXT,
@@ -13,10 +13,11 @@ import {
   ALERT_TEXT,
   HEADER_TEXT,
   LINK_TEXT,
-  ERROR_TEXT,
 } from "./registrationStrings";
+import { registerUserThunk } from "../../store/user/thunk";
 const Registration = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
@@ -53,25 +54,9 @@ const Registration = () => {
       password: userPassword,
     };
 
-    try {
-      const response = await fetch(API_URL.REGISTER, {
-        method: "POST",
-        body: JSON.stringify(newUser),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const result = await response.json();
-
-      if (result.successful) {
-        navigate(PATH_URIS.LOGIN);
-      } else {
-        alert(result.message || ALERT_TEXT.REGISTRATION_FAILED);
-      }
-    } catch (error) {
-      console.error(ERROR_TEXT.REGISTRATION_ERROR, error);
-      alert(ALERT_TEXT.REGISTRATION_FAILED);
+    const result = await dispatch(registerUserThunk(newUser));
+    if (result.success) {
+      navigate(PATH_URIS.LOGIN);
     }
   }
 

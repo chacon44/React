@@ -1,26 +1,38 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { deleteCourse } from "../../../../store/courses/actions";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteCourse } from "../../../../store/courses/thunk";
 import Button from "../../../../common/Button/Button";
 import formatDuration from "../../../../helpers/formatDuration";
 import dateFormater from "../../../../helpers/dateFormatter";
 import styles from "./CourseCard.module.css";
 import { BUTTON_TEXT, TITLE_TEXT } from "./courseCardStrings";
-import getAuthors from "../../../../helpers/authorsGetter";
-import useCombinedAuthors from "../../../../helpers/useCombinedAuthors";
 import { BUTTON_TYPE } from "../../../../common/Button/buttonStrings";
+import { ROLES } from "../../../../constants";
+import {
+  getAuthors,
+  getAuthorsName,
+  getToken,
+  getUserRole,
+} from "../../../../store/selectors";
 function CourseCard(props) {
   const { id, title, description, creationDate, duration, authors } = props;
-  const combinedAuthorsList = useCombinedAuthors();
-  const authorNames = getAuthors(authors, combinedAuthorsList);
   const dispatch = useDispatch();
+  const userRole = useSelector(getUserRole);
+  const allAuthors = useSelector(getAuthors);
+  const [authorNames, setAuthorNames] = useState([]);
+  const token = useSelector(getToken);
+
+  useEffect(() => {
+    const courseAuthors = allAuthors.filter((author) =>
+      authors.includes(author.id),
+    );
+    setAuthorNames(courseAuthors.map(getAuthorsName));
+  }, [allAuthors, authors]);
 
   const handleDeleteCourse = () => {
-    dispatch(deleteCourse(id));
+    dispatch(deleteCourse(id, token));
   };
-
-  const handleUpdateCourse = () => {};
 
   const handleShowInfo = () => {};
 
@@ -54,18 +66,24 @@ function CourseCard(props) {
               onClick={handleShowInfo}
             />
           </Link>
-          <Button
-            className="cardButton"
-            buttonText={BUTTON_TEXT.UPDATE_COURSE}
-            type={BUTTON_TYPE.BUTTON}
-            onClick={handleUpdateCourse}
-          />
-          <Button
-            className="cardButton"
-            buttonText={BUTTON_TEXT.DELETE_COURSE}
-            type={BUTTON_TYPE.BUTTON}
-            onClick={handleDeleteCourse}
-          />
+          {userRole === ROLES.ADMIN && (
+            <>
+              <Link to={`/courses/update/${id}`}>
+                <Button
+                  className="cardButton"
+                  buttonText={BUTTON_TEXT.UPDATE_COURSE}
+                  type={BUTTON_TYPE.BUTTON}
+                />
+              </Link>
+
+              <Button
+                className="cardButton"
+                buttonText={BUTTON_TEXT.DELETE_COURSE}
+                type={BUTTON_TYPE.BUTTON}
+                onClick={handleDeleteCourse}
+              />
+            </>
+          )}
         </div>
       </div>
     </div>

@@ -4,6 +4,7 @@ export const BUTTON_TEXT = {
   ADD_AUTHOR: "Add Author",
   DELETE_AUTHOR: "Delete Author",
   CANCEL: "Cancel creation",
+  UPDATE_COURSE: "Update course",
 };
 
 export const PLACEHOLDER_TEXT = {

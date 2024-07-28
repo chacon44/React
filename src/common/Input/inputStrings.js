@@ -3,4 +3,5 @@ export const INPUT_TYPE = {
   EMAIL: "email",
   TEXT: "text",
   NUMBER: "number",
+  SUBMIT: "submit",
 };

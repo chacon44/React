@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
-import { addCourse } from "../../store/courses/actions";
-import { addAuthor, getAuthors } from "../../store/authors/actions";
+import { addAuthor, fetchAuthors } from "../../store/authors/thunk";
 import Button from "../../common/Button/Button";
 import Input from "../../common/Input/Input";
 import formatDuration from "../../helpers/formatDuration";
-import styles from "./CreateCourse.module.css";
+import styles from "./CourseForm.module.css";
 import {
   BUTTON_TEXT,
   PLACEHOLDER_TEXT,
@@ -15,31 +14,49 @@ import {
   getAlertText,
   PARAMETERS,
   TITLE_TEXT,
-} from "./createCourseStrings";
+} from "./courseFormStrings";
 import { PATH_URIS } from "../../constants";
 import { BUTTON_TYPE } from "../../common/Button/buttonStrings";
 import { INPUT_TYPE } from "../../common/Input/inputStrings";
+import { getAuthors, getToken } from "../../store/selectors";
+import {
+  addCourseFuntion,
+  fetchCourseById,
+  updateCourse,
+} from "../../store/courses/thunk";
 
-function CreateCourse() {
+function CourseForm() {
+  const { courseId } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const authorsListStore = useSelector(
-    (state) =>
-      state.authors.apiAuthors.concat(state.authors.localAuthors) || [],
-  );
+  const token = useSelector(getToken);
+  const authorsListStore = useSelector(getAuthors || []);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [duration, setDuration] = useState("");
   const [newAuthor, setNewAuthor] = useState("");
-
   const [availableAuthorsList, setAvailableAuthorsList] = useState([]);
   const [assignedAuthorsList, setAssignedAuthorsList] = useState([]);
+  const [loadingCourse, setloadingCourse] = useState(true);
 
   const ALERT_TEXT = getAlertText();
 
   useEffect(() => {
-    dispatch(getAuthors());
-  }, [dispatch]);
+    dispatch(fetchAuthors());
+    if (courseId && loadingCourse) {
+      dispatch(fetchCourseById(courseId)).then((course) => {
+        setTitle(course.title);
+        setDescription(course.description);
+        setDuration(course.duration);
+        setAssignedAuthorsList(
+          course.authors.map((authorId) => {
+            return authorsListStore.find((author) => author.id === authorId);
+          }),
+        );
+      });
+      setloadingCourse(false);
+    }
+  }, [dispatch, loadingCourse, authorsListStore, courseId]);
 
   useEffect(() => {
     const filteredAuthors = authorsListStore.filter(
@@ -48,7 +65,7 @@ function CreateCourse() {
     );
 
     setAvailableAuthorsList(filteredAuthors);
-  }, [availableAuthorsList, authorsListStore, assignedAuthorsList]);
+  }, [authorsListStore, assignedAuthorsList]);
 
   function createNewAuthor(author) {
     if (author.length < PARAMETERS.AUTHOR_MIN_LENGTH) {
@@ -59,18 +76,16 @@ function CreateCourse() {
       id: uuidv4(),
       name: author,
     };
+
+    dispatch(addAuthor(newAuthor, token));
     setAvailableAuthorsList([...availableAuthorsList, newAuthor]);
-    dispatch(addAuthor(newAuthor));
     setNewAuthor("");
   }
 
   function addCourseAuthor(author) {
     setAssignedAuthorsList([...assignedAuthorsList, author]);
     setAvailableAuthorsList(
-      availableAuthorsList.filter(
-        (item) =>
-          !assignedAuthorsList.some((assigned) => assigned.id === item.id),
-      ),
+      availableAuthorsList.filter((item) => item.id !== author.id),
     );
   }
 
@@ -112,14 +127,18 @@ function CreateCourse() {
   function createCourseSubmitHandler() {
     if (isValidCreateCoursePayload()) {
       const newCourse = {
-        id: uuidv4(),
+        id: courseId || uuidv4(),
         title,
         description,
-        creationDate: new Date().toLocaleDateString(),
-        duration,
+        duration: Number(duration),
         authors: assignedAuthorsList.map((author) => author.id),
+        creationDate: new Date().toLocaleDateString(),
       };
-      dispatch(addCourse(newCourse));
+      if (courseId) {
+        dispatch(updateCourse(courseId, newCourse, token));
+      } else {
+        dispatch(addCourseFuntion(newCourse, token));
+      }
       navigate(PATH_URIS.COURSES_LIST);
     }
   }
@@ -138,7 +157,9 @@ function CreateCourse() {
           />
         </div>
         <Button
-          buttonText={BUTTON_TEXT.CREATE_COURSE}
+          buttonText={
+            courseId ? BUTTON_TEXT.UPDATE_COURSE : BUTTON_TEXT.CREATE_COURSE
+          }
           type={BUTTON_TYPE.BUTTON}
           onClick={createCourseSubmitHandler}
         />
@@ -232,4 +253,4 @@ function CreateCourse() {
   );
 }
 
-export default CreateCourse;
+export default CourseForm;

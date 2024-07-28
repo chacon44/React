@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "../../store/user/actions";
-import { loginService } from "../../services";
+import { useDispatch } from "react-redux";
 import Button from "../../common/Button/Button";
 import Input from "../../common/Input/Input";
-import { GLOBAL_PARAMETERS, PATH_URIS } from "../../constants";
+import { GLOBAL_PARAMETERS, PATH_URIS, ROLES } from "../../constants";
 import classes from "./Login.module.css";
 import {
   BUTTON_TEXT,
@@ -17,6 +15,7 @@ import {
 } from "./loginStrings";
 import { INPUT_TYPE } from "../../common/Input/inputStrings";
 import { BUTTON_TYPE } from "../../common/Button/buttonStrings";
+import { loginUserThunk } from "../../store/user/thunk";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -56,26 +55,12 @@ const Login = () => {
       const user = {
         email: userEmail,
         password: userPassword,
+        role: ROLES.USER,
       };
 
-      try {
-        const result = await loginService(user);
-        if (result.successful) {
-          dispatch(
-            setUser({
-              name: result.user.name,
-              email: result.user.email,
-              password: userPassword,
-              token: result.token,
-            }),
-          );
-          navigate(PATH_URIS.COURSES_LIST);
-        } else {
-          alert(result.message || ALERT_TEXT.LOGIN_FAILED);
-        }
-      } catch (error) {
-        alert(ALERT_TEXT.LOGIN_ERROR);
-      }
+      dispatch(loginUserThunk(user)).then(() => {
+        navigate(PATH_URIS.COURSES_LIST);
+      });
     }
   }
 

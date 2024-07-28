@@ -1,7 +1,9 @@
-import { SET_USER, REMOVE_USER } from "./types";
+import { ADMIN_CREDENTIALS, ROLES } from "../../constants";
+import { GET_CURRENT_USER, LOGIN_USER, LOGOUT_USER } from "./types";
 
-const initialState = {
+const userInitialState = {
   isAuth: false,
+  role: "",
   user: {
     name: "",
     email: "",
@@ -10,24 +12,44 @@ const initialState = {
   },
 };
 
-const userReducer = (state = initialState, action) => {
+const userReducer = (state = userInitialState, action) => {
   switch (action.type) {
-    case SET_USER:
+    case LOGIN_USER:
       return {
         ...state,
         isAuth: true,
-        user: action.payload,
+        role:
+          action.payload.email === ADMIN_CREDENTIALS.EMAIL
+            ? ROLES.ADMIN
+            : ROLES.USER,
+        user: {
+          ...state.user,
+          name:
+            action.payload.role === ROLES.ADMIN
+              ? ROLES.ADMIN
+              : action.payload.name,
+          email: action.payload.email,
+          password: action.payload.password,
+          token: action.payload.token,
+        },
       };
-    case REMOVE_USER:
+    case LOGOUT_USER:
       return {
         ...state,
         isAuth: false,
+        role: "",
         user: {
           name: "",
           email: "",
           password: "",
           token: "",
         },
+      };
+    case GET_CURRENT_USER:
+      return {
+        ...state,
+        isAuth: true,
+        role: action.payload.role,
       };
     default:
       return state;
