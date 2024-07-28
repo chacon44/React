@@ -15,6 +15,7 @@ import {
   LINK_TEXT,
 } from "./registrationStrings";
 import { registerUserThunk } from "../../store/user/thunk";
+import { INPUT_TYPE } from "../../common/Input/inputStrings";
 const Registration = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -71,7 +72,7 @@ const Registration = () => {
           <Input
             name="registrationUserName"
             labelText={LABEL_TEXT.NAME}
-            type="text"
+            type={INPUT_TYPE.TEXT}
             value={userName}
             placeholderText={PLACEHOLDER_TEXT.ENTER_NAME}
             onChange={(e) => setUserName(e.target.value)}
@@ -81,7 +82,7 @@ const Registration = () => {
           <Input
             name="registrationUserEmail"
             labelText={LABEL_TEXT.EMAIL}
-            type="email"
+            type={INPUT_TYPE.EMAIL}
             value={userEmail}
             placeholderText={PLACEHOLDER_TEXT.ENTER_EMAIL}
             onChange={(e) => setUserEmail(e.target.value)}
@@ -91,14 +92,14 @@ const Registration = () => {
           <Input
             name="registrationUserPass"
             labelText={LABEL_TEXT.PASSWORD}
-            type="password"
+            type={INPUT_TYPE.PASSWORD}
             value={userPassword}
             placeholderText={PLACEHOLDER_TEXT.ENTER_PASSWORD}
             onChange={(e) => setUserPassword(e.target.value)}
           />
         </div>
 
-        <Button type="submit" buttonText={BUTTON_TEXT.REGISTER} />
+        <Button type={INPUT_TYPE.SUBMIT} buttonText={BUTTON_TEXT.REGISTER} />
         <h4>
           <span>{LINK_TEXT.LOGIN_PROMPT}</span>
           <Link to={PATH_URIS.LOGIN}>{LINK_TEXT.LOGIN}</Link>

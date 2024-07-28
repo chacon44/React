@@ -8,7 +8,7 @@ import Courses from "./components/Courses/Courses";
 import CourseForm from "./components/CourseForm/CourseForm";
 import EmptyCourseList from "./components/EmptyCourseList/EmptyCourseList";
 import CourseInfo from "./components/CourseInfo/CourseInfo";
-import PrivateRoute from "./components/PrivateRoute/privateRoute";
+import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import { getCourses, getUserIsAuth } from "./store/selectors";
 import { PATH_URIS } from "./constants";
 import { fetchCourses } from "./store/courses/thunk";
