@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import Button from "../../common/Button/Button";
 import Input from "../../common/Input/Input";
@@ -15,14 +15,13 @@ import {
   LINK_TEXT,
 } from "./registrationStrings";
 import { registerUserThunk } from "../../store/user/thunk";
-import { INPUT_TYPE } from "../../common/Input/inputStrings";
 const Registration = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
-  const [isRegistered, setIsRegistered] = useState(false);
 
   function isValidUserData() {
     if (typeof userName !== "string" || userName.trim() === "") {
@@ -57,7 +56,7 @@ const Registration = () => {
 
     const result = await dispatch(registerUserThunk(newUser));
     if (result.success) {
-      setIsRegistered(true);
+      navigate(PATH_URIS.LOGIN);
     }
   }
 
@@ -68,38 +67,38 @@ const Registration = () => {
         onSubmit={registrationOnSubmitHandler}
       >
         <h3>{HEADER_TEXT.REGISTRATION}</h3>
-        <div>
+        <div className={classes.inputBlock}>
           <Input
             name="registrationUserName"
             labelText={LABEL_TEXT.NAME}
-            type={INPUT_TYPE.TEXT}
+            type="text"
             value={userName}
             placeholderText={PLACEHOLDER_TEXT.ENTER_NAME}
             onChange={(e) => setUserName(e.target.value)}
           />
         </div>
-        <div>
+        <div className={classes.inputBlock}>
           <Input
             name="registrationUserEmail"
             labelText={LABEL_TEXT.EMAIL}
-            type={INPUT_TYPE.EMAIL}
+            type="email"
             value={userEmail}
             placeholderText={PLACEHOLDER_TEXT.ENTER_EMAIL}
             onChange={(e) => setUserEmail(e.target.value)}
           />
         </div>
-        <div>
+        <div className={classes.inputBlock}>
           <Input
             name="registrationUserPass"
             labelText={LABEL_TEXT.PASSWORD}
-            type={INPUT_TYPE.PASSWORD}
+            type="password"
             value={userPassword}
             placeholderText={PLACEHOLDER_TEXT.ENTER_PASSWORD}
             onChange={(e) => setUserPassword(e.target.value)}
           />
         </div>
 
-        <Button type={INPUT_TYPE.SUBMIT} buttonText={BUTTON_TEXT.REGISTER} />
+        <Button type="submit" buttonText={BUTTON_TEXT.REGISTER} />
         <h4>
           <span>{LINK_TEXT.LOGIN_PROMPT}</span>
           <Link to={PATH_URIS.LOGIN}>{LINK_TEXT.LOGIN}</Link>

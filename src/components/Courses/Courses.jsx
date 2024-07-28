@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import SearchBar from "./components/SearchBar/SearchBar";
 import CourseCard from "./components/CourseCard/CourseCard";
@@ -14,6 +14,7 @@ import { fetchAuthors } from "../../store/authors/thunk";
 import { ROLES } from "../../constants";
 
 function Courses() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const courses = useSelector(getCourses) || [];
   const userRole = useSelector(getUserRole);
@@ -23,6 +24,10 @@ function Courses() {
     dispatch(fetchCourses());
     dispatch(fetchAuthors());
   }, [dispatch]);
+
+  const createCourseButtonHandler = () => {
+    navigate(PATH_URIS.ADD_COURSE);
+  };
 
   const filteredCourseList = Array.isArray(courses)
     ? courses.filter(
@@ -37,12 +42,11 @@ function Courses() {
       <div className={styles.panel}>
         <SearchBar searchMessage={setSearch} />
         {userRole === ROLES.ADMIN && (
-          <Link to={PATH_URIS.ADD_COURSE}>
-            <Button
-              buttonText={BUTTON_TEXT.ADD_COURSE}
-              type={BUTTON_TYPE.SUBMIT}
-            />
-          </Link>
+          <Button
+            buttonText={BUTTON_TEXT.ADD_COURSE}
+            type={BUTTON_TYPE.SUBMIT}
+            onClick={createCourseButtonHandler}
+          />
         )}
       </div>
       {filteredCourseList.length > 0 ? (

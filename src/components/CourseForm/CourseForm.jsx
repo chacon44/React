@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { addAuthor, fetchAuthors } from "../../store/authors/thunk";
 import Button from "../../common/Button/Button";
@@ -27,6 +27,7 @@ import {
 
 function CourseForm() {
   const { courseId } = useParams();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const token = useSelector(getToken);
   const authorsListStore = useSelector(getAuthors || []);
@@ -119,6 +120,10 @@ function CourseForm() {
     return true;
   }
 
+  function cancelCourseCreationHandler() {
+    navigate(PATH_URIS.COURSES_LIST);
+  }
+
   function createCourseSubmitHandler() {
     if (isValidCreateCoursePayload()) {
       const newCourse = {
@@ -134,7 +139,7 @@ function CourseForm() {
       } else {
         dispatch(addCourseFuntion(newCourse, token));
       }
-      return true;
+      navigate(PATH_URIS.COURSES_LIST);
     }
   }
 
@@ -151,17 +156,18 @@ function CourseForm() {
             onChange={(e) => setTitle(e.target.value)}
           />
         </div>
-        <Link to={PATH_URIS.COURSES_LIST}>
-          <Button
-            buttonText={
-              courseId ? BUTTON_TEXT.UPDATE_COURSE : BUTTON_TEXT.CREATE_COURSE
-            }
-            type={BUTTON_TYPE.BUTTON}
-          />
-        </Link>
-        <Link to={PATH_URIS.COURSES_LIST}>
-          <Button buttonText={BUTTON_TEXT.CANCEL} type={BUTTON_TYPE.BUTTON} />
-        </Link>
+        <Button
+          buttonText={
+            courseId ? BUTTON_TEXT.UPDATE_COURSE : BUTTON_TEXT.CREATE_COURSE
+          }
+          type={BUTTON_TYPE.BUTTON}
+          onClick={createCourseSubmitHandler}
+        />
+        <Button
+          buttonText={BUTTON_TEXT.CANCEL}
+          type={BUTTON_TYPE.BUTTON}
+          onClick={cancelCourseCreationHandler}
+        />
       </div>
       <div className={styles.createDescriptionBlock}>
         <label htmlFor="createDescription">{LABEL_TEXT.DESCRIPTION}</label>
