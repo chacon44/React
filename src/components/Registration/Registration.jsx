@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import Button from "../../common/Button/Button";
 import Input from "../../common/Input/Input";
@@ -17,12 +17,12 @@ import {
 import { registerUserThunk } from "../../store/user/thunk";
 import { INPUT_TYPE } from "../../common/Input/inputStrings";
 const Registration = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
+  const [isRegistered, setIsRegistered] = useState(false);
 
   function isValidUserData() {
     if (typeof userName !== "string" || userName.trim() === "") {
@@ -57,7 +57,7 @@ const Registration = () => {
 
     const result = await dispatch(registerUserThunk(newUser));
     if (result.success) {
-      navigate(PATH_URIS.LOGIN);
+      setIsRegistered(true);
     }
   }
 
@@ -68,7 +68,7 @@ const Registration = () => {
         onSubmit={registrationOnSubmitHandler}
       >
         <h3>{HEADER_TEXT.REGISTRATION}</h3>
-        <div className={classes.inputBlock}>
+        <div>
           <Input
             name="registrationUserName"
             labelText={LABEL_TEXT.NAME}
@@ -78,7 +78,7 @@ const Registration = () => {
             onChange={(e) => setUserName(e.target.value)}
           />
         </div>
-        <div className={classes.inputBlock}>
+        <div>
           <Input
             name="registrationUserEmail"
             labelText={LABEL_TEXT.EMAIL}
@@ -88,7 +88,7 @@ const Registration = () => {
             onChange={(e) => setUserEmail(e.target.value)}
           />
         </div>
-        <div className={classes.inputBlock}>
+        <div>
           <Input
             name="registrationUserPass"
             labelText={LABEL_TEXT.PASSWORD}

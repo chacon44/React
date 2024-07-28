@@ -1,5 +1,6 @@
 import axios from "axios";
 import { API_URL } from "./constants";
+import { ALERT_TEXT } from "./components/Registration/registrationStrings";
 
 export const loginService = async (user) => {
   const response = await axios.post(API_URL.LOGIN, user, {
@@ -122,8 +123,13 @@ export async function registerUserAPI(user) {
         "Content-Type": "application/json",
       },
     });
+    if (!response.ok) {
+      throw new Error(ALERT_TEXT.EMAIL_ALREADY_EXISTS);
+    }
+
     return await response.json();
   } catch (error) {
-    console.error(error);
+    console.error(ALERT_TEXT.EMAIL_ALREADY_EXISTS);
+    throw error;
   }
 }

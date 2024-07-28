@@ -83,8 +83,13 @@ export const registerUserThunk = (newUser) => async () => {
       return { success: false };
     }
   } catch (error) {
-    console.error(ERROR_TEXT.REGISTRATION_ERROR, error);
-    alert(ALERT_TEXT.REGISTRATION_FAILED);
+    if (error.message === ALERT_TEXT.EMAIL_ALREADY_EXISTS) {
+      console.log(error.message);
+      alert(ALERT_TEXT.EMAIL_ALREADY_EXISTS);
+    } else {
+      console.error(ERROR_TEXT.REGISTRATION_ERROR, error);
+      alert(ALERT_TEXT.REGISTRATION_FAILED);
+    }
     return { success: false };
   }
 };
