@@ -1,13 +1,15 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
 import Courses from "../Courses";
 import rootReducer from "../../../store/rootReducer";
 import { ROLES } from "../../../constants";
 import { BUTTON_TEXT } from "../coursesStrings";
+import { PATH_URIS } from "../../../constants";
+import CourseForm from "../../CourseForm/CourseForm"; // Import the CourseForm component
 
 // Helper function to render with Redux and Router
 const renderWithRedux = (
@@ -24,7 +26,12 @@ const renderWithRedux = (
   return {
     ...render(
       <Provider store={store}>
-        <MemoryRouter initialEntries={initialEntries}>{component}</MemoryRouter>
+        <MemoryRouter initialEntries={initialEntries}>
+          <Routes>
+            <Route path="/" element={component} />
+            <Route path={PATH_URIS.ADD_COURSE} element={<CourseForm />} /> {/* Add the route for the course form */}
+          </Routes>
+        </MemoryRouter>
       </Provider>,
     ),
     store,
@@ -71,7 +78,7 @@ describe("Courses component", () => {
     expect(courseCards).toHaveLength(initialState.courses.length);
   });
 
-  test('CourseForm should be showed after a click on a button "Add course"', () => {
+  test('CourseForm should be showed after a click on a button "Add course"', async () => {
     const initialState = {
       courses: [],
       user: {
@@ -91,7 +98,9 @@ describe("Courses component", () => {
     const addButton = screen.getByText(BUTTON_TEXT.ADD_COURSE);
     fireEvent.click(addButton);
 
-    // Check that the URL has changed to the course form page
-    expect(screen.getAllByLabelText("Title")).toBeInTheDocument();
+    // Wait for the CourseForm to be rendered
+    await waitFor(() => {
+      expect(screen.getByLabelText("Title")).toBeInTheDocument();
+    });
   });
 });
