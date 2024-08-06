@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import Input from "../../../../common/Input/Input";
 import Button from "../../../../common/Button/Button";
 import styles from "./SearchBar.module.css";
@@ -37,5 +38,9 @@ function SearchBar({ searchMessage }) {
     </div>
   );
 }
+
+SearchBar.propTypes = {
+  searchMessage: PropTypes.func.isRequired,
+};
 
 export default SearchBar;

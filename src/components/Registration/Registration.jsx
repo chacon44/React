@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import Button from "../../common/Button/Button";
@@ -15,6 +15,7 @@ import {
   LINK_TEXT,
 } from "./registrationStrings";
 import { registerUserThunk } from "../../store/user/thunk";
+
 const Registration = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();

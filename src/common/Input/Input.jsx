@@ -5,7 +5,7 @@ import "./Input.module.css";
 
 function Input(props) {
   const {
-    placeholderText = "",
+    placeholder = "",
     onChange,
     labelText = "",
     value,
@@ -20,7 +20,7 @@ function Input(props) {
         id={name}
         type={type}
         value={value}
-        placeholder={placeholderText}
+        placeholder={placeholder}
         onChange={onChange}
       />
     </>

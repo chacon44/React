@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { PATH_URIS, ROLES } from "../../constants";
@@ -12,6 +13,10 @@ const PrivateRoute = ({ children }) => {
   }
 
   return children;
+};
+
+PrivateRoute.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export default PrivateRoute;
