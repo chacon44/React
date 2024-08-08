@@ -1,36 +1,13 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { Provider } from "react-redux";
-import { configureStore } from "@reduxjs/toolkit";
-import { MemoryRouter } from "react-router-dom";
 import CourseCard from "../CourseCard";
-import rootReducer from "../../../../../store/rootReducer";
 import { ROLES } from "../../../../../constants";
 import formatDuration from "../../../../../helpers/formatDuration";
 import dateFormater from "../../../../../helpers/dateFormatter";
+import renderFunction from "../../../../../helpers/testUtils";
 
-// Helper function to render with Redux and Router
-const renderWithRedux = (
-  component,
-  {
-    initialState,
-    store = configureStore({
-      reducer: rootReducer,
-      preloadedState: initialState,
-    }),
-    initialEntries = ["/"],
-  } = {},
-) => {
-  return {
-    ...render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={initialEntries}>{component}</MemoryRouter>
-      </Provider>,
-    ),
-    store,
-  };
-};
+const renderWithRedux = renderFunction;
 
 describe("CourseCard component", () => {
   const course = {

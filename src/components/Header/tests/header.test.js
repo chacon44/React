@@ -1,99 +1,78 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { Provider } from "react-redux";
-import { configureStore } from "@reduxjs/toolkit";
-import { MemoryRouter } from "react-router-dom";
-import Header from "../Header";
-import rootReducer from "../../../store/rootReducer";
-import { ROLES, PATH_URIS } from "../../../constants";
+import CourseCard from "../../Courses/components/CourseCard/CourseCard";
+import { ROLES } from "../../../constants";
+import formatDuration from "../../../helpers/formatDuration";
+import dateFormater from "../../../helpers/dateFormatter";
+import renderFunction from "../../../helpers/testUtils";
 
-// Helper function to render with Redux and Router
-const renderWithRedux = (
-  component,
-  {
-    initialState,
-    store = configureStore({
-      reducer: rootReducer,
-      preloadedState: initialState,
-    }),
-    initialEntries = ["/"],
-  } = {},
-) => {
-  return {
-    ...render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={initialEntries}>{component}</MemoryRouter>
-      </Provider>,
-    ),
-    store,
+const renderWithRedux = renderFunction;
+
+describe("CourseCard component", () => {
+  const course = {
+    id: "1",
+    title: "Course 1",
+    description: "Description 1",
+    duration: 120,
+    creationDate: "2021-01-01",
+    authors: ["1", "2"],
   };
-};
 
-describe("Header component", () => {
-  test("should display logo and user name", () => {
-    const initialState = {
+  const initialState = {
+    user: {
+      isAuth: true,
+      role: ROLES.USER,
       user: {
-        isAuth: true,
-        role: ROLES.USER,
-        user: {
-          name: "John Doe",
-          email: "john.doe@example.com",
-          password: "password",
-          token: "sample-token",
-        },
+        name: "John Doe",
+        email: "john.doe@example.com",
+        password: "password",
+        token: "sample-token",
       },
-    };
+    },
+    authors: [
+      { id: "1", name: "Author 1" },
+      { id: "2", name: "Author 2" },
+    ],
+  };
 
-    renderWithRedux(<Header />, { initialState });
+  test("should display title", () => {
+    renderWithRedux(<CourseCard {...course} />, { initialState });
 
-    // Check for the Logo component
-    expect(screen.getByAltText("logo")).toBeInTheDocument();
-
-    // Check for the user name
-    expect(screen.getByText("John Doe")).toBeInTheDocument();
+    // Check for the title
+    expect(screen.getByText(course.title)).toBeInTheDocument();
   });
 
-  test("should display ADMIN if no user name is provided", () => {
-    const initialState = {
-      user: {
-        isAuth: true,
-        role: ROLES.ADMIN,
-        user: {
-          name: ROLES.ADMIN,
-          email: "admin@example.com",
-          password: "password",
-          token: "sample-token",
-        },
-      },
-    };
+  test("should display description", () => {
+    renderWithRedux(<CourseCard {...course} />, { initialState });
 
-    renderWithRedux(<Header />, { initialState });
-
-    // Check for the default user name ADMIN
-    expect(screen.getByText(ROLES.ADMIN)).toBeInTheDocument();
+    // Check for the description
+    expect(screen.getByText(course.description)).toBeInTheDocument();
   });
 
-  test("should not display user name on login or registration page", () => {
-    const initialState = {
-      user: {
-        isAuth: false,
-        role: "",
-        user: {
-          name: "John Doe",
-          email: "john.doe@example.com",
-          password: "password",
-          token: "sample-token",
-        },
-      },
-    };
+  test("should display duration in the correct format", () => {
+    renderWithRedux(<CourseCard {...course} />, { initialState });
 
-    renderWithRedux(<Header />, {
-      initialState,
-      initialEntries: [PATH_URIS.LOGIN],
-    });
+    // Check for the duration
+    expect(
+      screen.getByText(formatDuration(course.duration)),
+    ).toBeInTheDocument();
+  });
 
-    // Ensure the user name is not displayed on the login page
-    expect(screen.queryByText("John Doe")).not.toBeInTheDocument();
+  test("should display authors list", () => {
+    renderWithRedux(<CourseCard {...course} />, { initialState });
+
+    // Check for the authors
+    expect(screen.getByText("Author 1")).toBeInTheDocument();
+    expect(screen.getByText("Author 2")).toBeInTheDocument();
+  });
+
+  test("should display created date in the correct format", () => {
+    renderWithRedux(<CourseCard {...course} />, { initialState });
+
+    // Check for the creation date
+    expect(
+      screen.getByText(dateFormater(course.creationDate)),
+    ).toBeInTheDocument();
   });
 });
