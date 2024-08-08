@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteCourse } from "../../../../store/courses/thunk";
@@ -15,6 +16,7 @@ import {
   getToken,
   getUserRole,
 } from "../../../../store/selectors";
+
 function CourseCard(props) {
   const { id, title, description, creationDate, duration, authors } = props;
   const dispatch = useDispatch();
@@ -37,7 +39,7 @@ function CourseCard(props) {
   const handleShowInfo = () => {};
 
   return (
-    <div className={styles.card}>
+    <div className={styles.card} data-testid="course-card">
       <div className={styles.cardLeft}>
         <h2 className={styles.title}>{title}</h2>
         <p className={styles.description}>{description}</p>
@@ -89,5 +91,14 @@ function CourseCard(props) {
     </div>
   );
 }
+
+CourseCard.propTypes = {
+  id: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  creationDate: PropTypes.string.isRequired,
+  duration: PropTypes.number.isRequired,
+  authors: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
 
 export default CourseCard;

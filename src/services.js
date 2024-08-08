@@ -1,25 +1,38 @@
-import axios from "axios";
 import { API_URL } from "./constants";
 import { ALERT_TEXT } from "./components/Registration/registrationStrings";
 
 export const loginService = async (user) => {
-  const response = await axios.post(API_URL.LOGIN, user, {
+  const response = await fetch(API_URL.LOGIN, {
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
+    body: JSON.stringify(user),
   });
-  const token = response.data.token;
-  return { ...response.data, token };
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const data = await response.json();
+  const token = data.token;
+  return { ...data, token };
 };
 
 export async function getCurrentUser(token) {
   try {
-    const response = await axios.get(API_URL.GET_CURRENT_USER, {
+    const response = await fetch(API_URL.GET_CURRENT_USER, {
+      method: "GET",
       headers: {
         Authorization: token,
       },
     });
-    return response.data;
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return await response.json();
   } catch (error) {
     console.error(error);
   }
@@ -28,6 +41,11 @@ export async function getCurrentUser(token) {
 export async function getAllCoursesAPI() {
   try {
     const response = await fetch(API_URL.ALL_COURSES);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
     return await response.json();
   } catch (error) {
     console.error(error);
@@ -42,6 +60,11 @@ export async function deleteCourseAPI(id, token) {
         Authorization: token,
       },
     });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
     return await response.json();
   } catch (error) {
     console.error(error);
@@ -58,6 +81,11 @@ export async function addCourseAPI(data, token) {
         Authorization: token,
       },
     });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
     return await response.json();
   } catch (error) {
     console.error(error);
@@ -67,6 +95,11 @@ export async function addCourseAPI(data, token) {
 export async function getCourseByIdAPI(courseId) {
   try {
     const response = await fetch(API_URL.GET_COURSE(courseId));
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
     return await response.json();
   } catch (error) {
     console.error(error);
@@ -83,6 +116,11 @@ export async function updateCourseAPI(courseId, data, token) {
         Authorization: token,
       },
     });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
     return await response.json();
   } catch (error) {
     console.error(error);
@@ -92,6 +130,11 @@ export async function updateCourseAPI(courseId, data, token) {
 export async function getAuthorsAPI() {
   try {
     const response = await fetch(API_URL.ALL_AUTHORS);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
     return await response.json();
   } catch (error) {
     console.error(error);
@@ -108,6 +151,11 @@ export async function addAuthorAPI(data, token) {
         Authorization: token,
       },
     });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
     return await response.json();
   } catch (error) {
     console.error(error);
@@ -123,6 +171,7 @@ export async function registerUserAPI(user) {
         "Content-Type": "application/json",
       },
     });
+
     if (!response.ok) {
       throw new Error(ALERT_TEXT.EMAIL_ALREADY_EXISTS);
     }

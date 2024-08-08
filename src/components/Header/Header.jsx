@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Button from "../../common/Button/Button";
 import Logo from "./components/Logo/Logo";
@@ -12,6 +12,7 @@ import { BUTTON_TYPE } from "../../common/Button/buttonStrings";
 
 function Header() {
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
   const userName = useSelector(getUserName);
   const isUserLogged = useSelector(getUserIsAuth);
@@ -29,11 +30,17 @@ function Header() {
   }, [isUserLogged, token, dispatch]);
 
   const displayName = token ? userName : HEADER_TEXT.NOT_LOGGED;
+
+  // Do not display user name on login or registration page
+  const hideUserName =
+    location.pathname === PATH_URIS.LOGIN ||
+    location.pathname === PATH_URIS.REGISTRATION;
+
   return (
     <div className={styles.header}>
       <Logo />
       <div className={styles.userBlock}>
-        <h2 className={styles.user}>{displayName}</h2>
+        {!hideUserName && <h2 className={styles.user}>{displayName}</h2>}
         {isUserLogged && (
           <Button
             buttonText={BUTTON_TEXT.LOGOUT}
